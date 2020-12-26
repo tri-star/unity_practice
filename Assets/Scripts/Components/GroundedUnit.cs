@@ -24,6 +24,8 @@ namespace ActionSample.Components
             }
             this.velocity = new Vector3(this.velocity.x, forceY, this.velocity.z);
             this._animator.SetBool("isWalking", (Mathf.Abs(this.velocity.x) > 0 || Mathf.Abs(this.velocity.z) > 0));
+            this.transform.localScale = new Vector3(this.velocity.x > 0 ? 1.0f : -1, 1.0f, 1.0f);
+
             base.Update();
         }
 
@@ -32,7 +34,7 @@ namespace ActionSample.Components
         {
             Collider c = this.GetComponent<Collider>();
 
-            if (collision.collider.tag == "ground")
+            if (collision.GetComponent<Collider>().tag == "ground")
             {
                 this.isGrounded = true;
             }

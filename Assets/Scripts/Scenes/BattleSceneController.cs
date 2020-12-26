@@ -26,7 +26,7 @@ namespace ActionSample.Scenes
             this._mainCamera = Component.FindObjectOfType<Camera>();
             this._pixelPerfectCamera = this._mainCamera.GetComponent<PixelPerfectCamera>();
 
-            this.BuildWall();
+            //this.BuildWall();
         }
 
         // Update is called once per frame
