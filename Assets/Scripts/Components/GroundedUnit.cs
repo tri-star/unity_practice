@@ -34,7 +34,7 @@ namespace ActionSample.Components
         {
             Collider c = this.GetComponent<Collider>();
 
-            if (collision.GetComponent<Collider>().tag == "ground")
+            if (collision.collider.tag == "ground")
             {
                 this.isGrounded = true;
             }
