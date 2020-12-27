@@ -47,6 +47,18 @@ namespace ActionSample.Domain
         }
 
 
+        public Dimension? GetDimension(Bounds self, Bounds other)
+        {
+            //var intersection = GetIntersection(self, other);
+            //if(intersection == null)
+            //{
+            //    return null;
+            //}
+            //return GetDimensionFromIntersection(self, intersection);
+            return null;
+        }
+
+
         /// <summary>
         /// 指定された衝突範囲が自分にとってどの方向の衝突かを返す
         /// </summary>

@@ -1,4 +1,5 @@
 using UnityEngine;
+using ActionSampleCollision = ActionSample.Domain.Collision;
 
 namespace ActionSample.Components
 {
@@ -9,9 +10,12 @@ namespace ActionSample.Components
         [SerializeField]
         private float _maxGravitySpeed = -3.3f;
 
+        private Collider _collider;
+
         public void Start()
         {
             this._animator = this.GetComponent<Animator>();
+            this._collider = this.GetComponent<Collider>();
             this.velocity = new Vector3(0, 0, 0);
         }
 
@@ -32,8 +36,6 @@ namespace ActionSample.Components
 
         public void OnCollisionEnter(Collision collision)
         {
-            Collider c = this.GetComponent<Collider>();
-
             if (collision.collider.tag == "ground")
             {
                 this.isGrounded = true;
@@ -44,14 +46,10 @@ namespace ActionSample.Components
         //専用のサービスに実装を移す
         private void adjustFootPosition(Collision collision)
         {
-            int count = collision.contactCount;
-            ContactPoint[] contacts = new ContactPoint[collision.contactCount];
-            collision.GetContacts(contacts);
-            foreach (ContactPoint contact in contacts)
-            {
-                Debug.Log($"count:{count},x:{contact.point.x}, y:{contact.point.y}, z:{contact.point.z}");
-            }
-
+            //ActionSampleCollision.Dimension? dimension = ActionSampleCollision.GetDimension(
+            //    this._collider.bounds,
+            //    collision.collider.bounds
+            //);
         }
 
     }
