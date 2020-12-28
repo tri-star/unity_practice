@@ -61,7 +61,7 @@ namespace Tests
                     new Vector3(50, 100, 20)
                 ),
                 new Bounds(
-                    new Vector3(0, 0, 0),
+                    new Vector3(0, 95, 0),
                     new Vector3(50, 5, 20)
                 ),
                 ActionSample.Domain.Collision.Dimension.TOP
@@ -77,7 +77,7 @@ namespace Tests
                     new Vector3(50, 100, 20)
                 ),
                 new Bounds(
-                    new Vector3(0, 95, 0),
+                    new Vector3(0, 5, 0),
                     new Vector3(50, 5, 20)
                 ),
                 ActionSample.Domain.Collision.Dimension.BOTTOM

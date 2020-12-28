@@ -24,11 +24,11 @@ namespace ActionSample.Components
             float forceY = 0;
             if (!this.isGrounded)
             {
-                forceY = Mathf.Min(this.velocity.y - 0.05f, this._maxGravitySpeed);
+                forceY = Mathf.Min(this.velocity.y - 0.07f, this._maxGravitySpeed);
             }
             this.velocity = new Vector3(this.velocity.x, forceY, this.velocity.z);
             this._animator.SetBool("isWalking", (Mathf.Abs(this.velocity.x) > 0 || Mathf.Abs(this.velocity.z) > 0));
-            this.transform.localScale = new Vector3(this.velocity.x > 0 ? 1.0f : -1, 1.0f, 1.0f);
+            //this.transform.localScale = new Vector3(this.velocity.x > 0 ? 1.0f : -1, 1.0f, 1.0f);
 
             base.Update();
         }
@@ -39,17 +39,35 @@ namespace ActionSample.Components
             if (collision.collider.tag == "ground")
             {
                 this.isGrounded = true;
+                adjustFootPosition(collision);
             }
-            adjustFootPosition(collision);
         }
 
         //専用のサービスに実装を移す
         private void adjustFootPosition(Collision collision)
         {
-            //ActionSampleCollision.Dimension? dimension = ActionSampleCollision.GetDimension(
-            //    this._collider.bounds,
-            //    collision.collider.bounds
-            //);
+            Bounds? intersection = ActionSampleCollision.GetIntersection(
+                this._collider.bounds,
+                collision.collider.bounds
+            );
+
+            if(intersection == null)
+            {
+                return;
+            }
+
+            ActionSampleCollision.Dimension? dimension = ActionSampleCollision.GetDimensionFromIntersection(
+                this._collider.bounds,
+                intersection ?? new Bounds()
+            );
+            if(dimension != ActionSampleCollision.Dimension.BOTTOM)
+            {
+                return;
+            }
+
+            Debug.Log(this.transform.position.y);
+            Debug.Log(intersection?.size.y);
+            this.transform.Translate(new Vector3(0, -intersection?.size.y ?? 0, 0));
         }
 
     }

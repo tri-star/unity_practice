@@ -31,7 +31,7 @@ namespace ActionSample.Domain
 
             float left = Mathf.Max(self.min.x, other.min.x) - self.min.x;
             float width = Mathf.Min(self.max.x, other.max.x) - Mathf.Max(self.min.x, other.min.x);
-            float top = Mathf.Max(self.min.y, other.min.y) - self.min.y;
+            float bottom = Mathf.Max(self.min.y, other.min.y) - self.min.y;
             float height = Mathf.Min(self.max.y, other.max.y) - Mathf.Max(self.min.y, other.min.y);
             float front = Mathf.Max(self.min.z, other.min.z) - self.min.z;
             float depth = Mathf.Min(self.max.z, other.max.z) - Mathf.Max(self.min.z, other.min.z);
@@ -39,7 +39,7 @@ namespace ActionSample.Domain
             return new Bounds(
                 new Vector3(
                     left + (width / 2),
-                    top + (height / 2),
+                    bottom + (height / 2),
                     front + (depth / 2)
                 ),
                 new Vector3(width, height, depth)
@@ -47,15 +47,14 @@ namespace ActionSample.Domain
         }
 
 
-        public Dimension? GetDimension(Bounds self, Bounds other)
+        public static Dimension? GetDimension(Bounds self, Bounds other)
         {
-            //var intersection = GetIntersection(self, other);
-            //if(intersection == null)
-            //{
-            //    return null;
-            //}
-            //return GetDimensionFromIntersection(self, intersection);
-            return null;
+            Bounds? intersection = GetIntersection(self, other)!;
+            if (!intersection.HasValue)
+            {
+                return null;
+            }
+            return GetDimensionFromIntersection(self, intersection ?? new Bounds());
         }
 
 
@@ -93,11 +92,11 @@ namespace ActionSample.Domain
             {
                 if (intersection.min.y >= (self.size.y / 2))
                 {
-                    return Dimension.BOTTOM;
+                    return Dimension.TOP;
                 }
                 else
                 {
-                    return Dimension.TOP;
+                    return Dimension.BOTTOM;
                 }
             }
             return null;
