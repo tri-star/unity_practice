@@ -12,11 +12,14 @@ namespace ActionSample.Components
 
         private Collider _collider;
 
+        private Collider? _groundCollider = null;
+
         public void Start()
         {
             this._animator = this.GetComponent<Animator>();
             this._collider = this.GetComponent<Collider>();
             this.velocity = new Vector3(0, 0, 0);
+            this._groundCollider = null;
         }
 
         public new void Update()
@@ -35,17 +38,17 @@ namespace ActionSample.Components
 
         public void OnCollisionEnter(Collision collision)
         {
-            if (collision.collider.tag == "ground")
+            if (collision.collider.tag == "obstacle")
             {
-                this.isGrounded = true;
-                adjustFootPosition(collision);
+                checkGrounded(collision);
             }
         }
 
         public void OnCollisionExit(Collision collision)
         {
-            if (collision.collider.tag == "ground")
+            if (collision.collider == this._groundCollider)
             {
+                this._groundCollider = null;
                 this.isGrounded = false;
             }
         }
@@ -53,7 +56,7 @@ namespace ActionSample.Components
 
 
         //専用のサービスに実装を移す
-        private void adjustFootPosition(Collision collision)
+        private void checkGrounded(Collision collision)
         {
             Bounds? intersection = ActionSampleCollision.GetIntersection(
                 this._collider.bounds,
@@ -62,6 +65,7 @@ namespace ActionSample.Components
 
             if(intersection == null)
             {
+                this.isGrounded = false;
                 return;
             }
 
@@ -71,9 +75,11 @@ namespace ActionSample.Components
             );
             if(dimension != ActionSampleCollision.Dimension.BOTTOM)
             {
+                this.isGrounded = false;
                 return;
             }
-
+            this._groundCollider = collision.collider;
+            this.isGrounded = true;
             this.transform.Translate(new Vector3(0, intersection?.size.y ?? 0, 0));
         }
     }
