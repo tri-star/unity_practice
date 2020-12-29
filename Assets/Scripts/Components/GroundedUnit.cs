@@ -24,7 +24,7 @@ namespace ActionSample.Components
             float forceY = 0;
             if (!this.isGrounded)
             {
-                forceY = Mathf.Min(this.velocity.y - 0.07f, this._maxGravitySpeed);
+                forceY = Mathf.Max(this.velocity.y - 0.07f, this._maxGravitySpeed);
             }
             this.velocity = new Vector3(this.velocity.x, forceY, this.velocity.z);
             this._animator.SetBool("isWalking", (Mathf.Abs(this.velocity.x) > 0 || Mathf.Abs(this.velocity.z) > 0));
@@ -65,9 +65,7 @@ namespace ActionSample.Components
                 return;
             }
 
-            Debug.Log(this.transform.position.y);
-            Debug.Log(intersection?.size.y);
-            this.transform.Translate(new Vector3(0, -intersection?.size.y ?? 0, 0));
+            this.transform.Translate(new Vector3(0, intersection?.size.y ?? 0, 0));
         }
 
     }
