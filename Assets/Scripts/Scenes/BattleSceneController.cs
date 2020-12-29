@@ -55,7 +55,7 @@ namespace ActionSample.Scenes
             float forceZ = (Mathf.Abs(direction.y) > 0) ? Mathf.Clamp(direction.y, -1, 1) : 0.0f;
 
             //// 移動に関するイベントを送信するようにする
-            this._player.GetComponent<GroundedUnit>().MoveToward(forceX, forceZ);
+            this._player.GetComponent<Unit>().MoveToward(forceX, forceZ);
         }
 
 
