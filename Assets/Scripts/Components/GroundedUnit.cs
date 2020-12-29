@@ -22,14 +22,13 @@ namespace ActionSample.Components
         public new void Update()
         {
             float forceY = 0;
-            if (!this.isGrounded)
+            if(!this.isGrounded)
             {
                 forceY = Mathf.Max(this.velocity.y - 0.07f, this._maxGravitySpeed);
             }
             this.velocity = new Vector3(this.velocity.x, forceY, this.velocity.z);
             this._animator.SetBool("isWalking", (Mathf.Abs(this.velocity.x) > 0 || Mathf.Abs(this.velocity.z) > 0));
             //this.transform.localScale = new Vector3(this.velocity.x > 0 ? 1.0f : -1, 1.0f, 1.0f);
-
             base.Update();
         }
 
@@ -42,6 +41,16 @@ namespace ActionSample.Components
                 adjustFootPosition(collision);
             }
         }
+
+        public void OnCollisionExit(Collision collision)
+        {
+            if (collision.collider.tag == "ground")
+            {
+                this.isGrounded = false;
+            }
+        }
+
+
 
         //専用のサービスに実装を移す
         private void adjustFootPosition(Collision collision)
@@ -67,7 +76,6 @@ namespace ActionSample.Components
 
             this.transform.Translate(new Vector3(0, intersection?.size.y ?? 0, 0));
         }
-
     }
 
 }
