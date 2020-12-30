@@ -27,10 +27,11 @@ namespace ActionSample.Scenes
             this._pixelPerfectCamera = this._mainCamera.GetComponent<PixelPerfectCamera>();
 
             this.BuildWall();
+            this._mainCamera.transform.eulerAngles = new Vector3(30.0f, 0, 0);
         }
 
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             float screenW = this._pixelPerfectCamera.refResolutionX;
             float screenH = this._pixelPerfectCamera.refResolutionY;
@@ -39,13 +40,10 @@ namespace ActionSample.Scenes
             float cameraX = Mathf.Clamp(this._player.transform.position.x, screenW / 2, worldWidth - (screenW / 2));
             float cameraY = Mathf.Clamp(this._player.transform.position.y, screenH / 2, worldHeight - (screenH / 2));
 
-            this.handleInput();
-
             this._mainCamera.transform.position = new Vector3(cameraX, cameraY);
 
-
+            this.handleInput();
         }
-
 
         private void handleInput()
         {

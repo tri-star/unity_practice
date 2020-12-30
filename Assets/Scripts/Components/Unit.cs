@@ -14,7 +14,7 @@ namespace ActionSample.Components
         private Animator _animator;
 
         [SerializeField]
-        private float _maxGravitySpeed = -3.3f;
+        private float _maxGravitySpeed;
 
         private Collider _collider;
 
@@ -22,7 +22,7 @@ namespace ActionSample.Components
 
 
         [SerializeField]
-        protected float speed = 0.5f;
+        protected float speed;
 
         public void Start()
         {
@@ -33,13 +33,13 @@ namespace ActionSample.Components
             this._groundCollider = null;
         }
 
-        public void Update()
+        public void FixedUpdate()
         {
             float forceY = 0;
             if (!this.IsGrounded())
             {
                 // @TODO: 重力加速度はゲーム全体のオプションとして定義する
-                forceY = Mathf.Max(this._velocity.y - 0.07f, this._maxGravitySpeed);
+                forceY = Mathf.Max(this._velocity.y - 0.1f, this._maxGravitySpeed);
             }
             this._velocity = new Vector3(this._velocity.x, forceY, this._velocity.z);
 
@@ -83,8 +83,8 @@ namespace ActionSample.Components
 
         public void MoveToward(float x, float z)
         {
-            float newX = Mathf.Clamp(x, -this.speed, this.speed);
-            float newZ = Mathf.Clamp(z, -this.speed, this.speed);
+            float newX = x * this.speed;
+            float newZ = z * this.speed;
             this._velocity = new Vector3(newX, this._velocity.y, newZ);
         }
 
