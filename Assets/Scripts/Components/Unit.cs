@@ -57,10 +57,19 @@ namespace ActionSample.Components
         {
             if (collision.collider.tag == "obstacle")
             {
-                // @TODO: 壁との衝突判定
+                resolveCollision(collision);
                 checkGrounded(collision);
             }
         }
+
+        public void OnCollisionStay(Collision collision)
+        {
+            if (collision.collider.tag == "obstacle")
+            {
+                resolveCollision(collision);
+            }
+        }
+
 
         public void OnCollisionExit(Collision collision)
         {
@@ -100,7 +109,6 @@ namespace ActionSample.Components
 
             if (intersection == null)
             {
-                this._groundCollider = null;
                 return;
             }
 
@@ -110,11 +118,50 @@ namespace ActionSample.Components
             );
             if (dimension != ActionSampleCollision.Dimension.BOTTOM)
             {
-                this._groundCollider = null;
                 return;
             }
             this._groundCollider = collision.collider;
             this.transform.Translate(new Vector3(0, intersection?.size.y ?? 0, 0));
+        }
+
+
+        // @TODO: 外部のクラスに移譲する
+        private void resolveCollision(Collision collision)
+        {
+            Bounds? intersection = ActionSampleCollision.GetIntersection(
+                this._collider.bounds,
+                collision.collider.bounds
+            );
+
+            if (intersection == null)
+            {
+                return;
+            }
+
+            ActionSampleCollision.Dimension? dimension = ActionSampleCollision.GetDimensionFromIntersection(
+                this._collider.bounds,
+                intersection ?? new Bounds()
+            );
+
+            float adjustX = 0;
+            float adjustZ = 0;
+            if (dimension == ActionSampleCollision.Dimension.LEFT)
+            {
+                adjustX = intersection?.size.x ?? 0;
+            }
+            if (dimension == ActionSampleCollision.Dimension.RIGHT)
+            {
+                adjustX = -intersection?.size.x ?? 0;
+            }
+            if (dimension == ActionSampleCollision.Dimension.FRONT)
+            {
+                adjustZ = intersection?.size.z ?? 0;
+            }
+            if (dimension == ActionSampleCollision.Dimension.REAR)
+            {
+                adjustZ = -intersection?.size.z ?? 0;
+            }
+            this.transform.Translate(new Vector3(adjustX, 0, adjustZ));
         }
 
     }
