@@ -10,6 +10,8 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         SignalBusInstaller.Install(Container);
 
         Container.DeclareSignal<PlayerAttackSignal>();
+        Container.DeclareSignal<UnitStateChangeSignal>();
+        Container.DeclareSignal<UnitDamageSignal>();
 
         Container.Bind<ActionButton>().AsTransient();
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using ActionSample.Signals;
 using ActionSample.Utils;
 using UnityEngine;
@@ -6,7 +7,7 @@ using Zenject;
 
 namespace ActionSample.Components
 {
-    public class PlayerUnit : MonoBehaviour, IInitializable, IDisposable
+    public class JimmyUnit : MonoBehaviour, IInitializable, IDisposable
     {
         [Inject]
         private SignalBus _signalBus;
@@ -15,24 +16,23 @@ namespace ActionSample.Components
 
         private Unit _unit;
 
+        private bool _damageFlowStarted;
+
         [Inject]
         public void Initialize()
         {
             _animator = GetComponent<Animator>();
-            _signalBus.Subscribe<PlayerAttackSignal>(OnAttackEvent);
             _unit = GetComponent<Unit>();
+            _signalBus.Subscribe<UnitStateChangeSignal>(OnUnitStateChange);
+            _signalBus.Subscribe<UnitDamageSignal>(OnUnitDamage);
+            _damageFlowStarted = false;
         }
 
         public void Dispose()
         {
-            _signalBus.Unsubscribe<PlayerAttackSignal>(OnAttackEvent);
+            _signalBus.Unsubscribe<UnitStateChangeSignal>(OnUnitStateChange);
+            _signalBus.Subscribe<UnitDamageSignal>(OnUnitDamage);
         }
-
-        public void OnAttackEvent(PlayerAttackSignal signal)
-        {
-            TrySetState(Unit.States.ATTACK);
-        }
-
 
         public void Update()
         {
@@ -50,10 +50,11 @@ namespace ActionSample.Components
                         TrySetState(Unit.States.WALKING);
                     }
                     break;
-                case Unit.States.ATTACK:
-                    if (AnimationUtil.IsAnimationDone(_animator, "PlayerAttack"))
+                case Unit.States.DAMAGE:
+                    if (!_damageFlowStarted)
                     {
-                        TrySetState(Unit.States.NEUTRAL);
+                        _damageFlowStarted = true;
+                        StartCoroutine(DamageStateFlow());
                     }
                     break;
             }
@@ -68,6 +69,34 @@ namespace ActionSample.Components
             }
             UpdateAnimator();
         }
+
+
+        public void OnUnitStateChange(UnitStateChangeSignal signal)
+        {
+            switch (signal.newState)
+            {
+                case Unit.States.DAMAGE:
+                    _damageFlowStarted = false;
+                    break;
+            }
+        }
+
+        public void OnUnitDamage(UnitDamageSignal signal)
+        {
+            if (TrySetState(Unit.States.DAMAGE))
+            {
+                _unit.AddForce(signal.force);
+            }
+        }
+
+
+        private IEnumerator DamageStateFlow()
+        {
+            // @TODO: ダメージ時間もパラメータ化する
+            yield return new WaitForSeconds(1.0f);
+            TrySetState(Unit.States.NEUTRAL);
+        }
+
 
         private bool TrySetState(Unit.States newState)
         {
@@ -104,24 +133,24 @@ namespace ActionSample.Components
             throw new NotSupportedException($"無効な状態が指定されました: {_unit.GetState()}");
         }
 
-
         private void UpdateAnimator()
         {
+            _animator.SetBool("isAttacking", false);
+            _animator.SetBool("isWalking", false);
+            _animator.SetBool("isDamaged", false);
             switch (_unit.GetState())
             {
                 case Unit.States.WALKING:
-                    _animator.SetBool("isAttacking", false);
                     _animator.SetBool("isWalking", true);
                     break;
                 case Unit.States.ATTACK:
                     _animator.SetBool("isAttacking", true);
-                    _animator.SetBool("isWalking", false);
                     break;
-                default:
-                    _animator.SetBool("isAttacking", false);
-                    _animator.SetBool("isWalking", false);
+                case Unit.States.DAMAGE:
+                    _animator.SetBool("isDamaged", true);
                     break;
             }
         }
+
     }
 }

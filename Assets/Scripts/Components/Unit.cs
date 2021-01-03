@@ -1,4 +1,6 @@
+using ActionSample.Signals;
 using UnityEngine;
+using Zenject;
 using ActionSampleCollision = ActionSample.Domain.Collision;
 
 namespace ActionSample.Components
@@ -16,6 +18,7 @@ namespace ActionSample.Components
             NEUTRAL,
             WALKING,
             ATTACK,
+            DAMAGE,
         }
 
         public enum Dimension
@@ -24,10 +27,14 @@ namespace ActionSample.Components
             RIGHT
         }
 
+        [Inject]
+        private SignalBus _signalBus;
+
         private Vector3 _velocity;
 
         private Animator _animator;
 
+        // @TODO: ユニットではなくゲームのパラメータにする
         [SerializeField]
         private float _maxGravitySpeed;
 
@@ -45,7 +52,6 @@ namespace ActionSample.Components
 
         public void Start()
         {
-            //
             this._animator = this.GetComponent<Animator>();
             this._collider = this.GetComponent<Collider>();
             this._velocity = new Vector3(0, 0, 0);
@@ -55,11 +61,15 @@ namespace ActionSample.Components
 
         public void FixedUpdate()
         {
-            float forceY = 0;
+            float forceY = _velocity.y;
             if (!this.IsGrounded())
             {
                 // @TODO: 重力加速度はゲーム全体のオプションとして定義する
-                forceY = Mathf.Max(this._velocity.y - 0.1f, this._maxGravitySpeed);
+                forceY = Mathf.Clamp(this._velocity.y - 1.5f, this._maxGravitySpeed, 20.0f);
+            }
+            else
+            {
+                forceY = 0;
             }
             this._velocity = new Vector3(this._velocity.x, forceY, this._velocity.z);
 
@@ -76,6 +86,20 @@ namespace ActionSample.Components
             {
                 resolveCollision(collision);
                 checkGrounded(collision);
+                if (IsGrounded())
+                {
+                    StopForce();
+                }
+            }
+            if (collision.collider.tag == "attack")
+            {
+                Unit attacker = collision.collider.gameObject.GetComponentInParent<Unit>();
+                // @TODO: 攻撃に関する情報は攻撃者のGameObjectから取得する
+                _signalBus.Fire<UnitDamageSignal>(new UnitDamageSignal()
+                {
+                    damage = 2000,
+                    force = new Vector3(2.0f * (attacker.dimension == Dimension.LEFT ? -1 : 1), 20.0f, 0)
+                });
             }
         }
 
@@ -114,12 +138,35 @@ namespace ActionSample.Components
             }
         }
 
-
-        public States state
+        public void AddForce(Vector3 force)
         {
-            get { return _state; }
-            set { _state = value; }
+            _velocity += force;
+
+            if (_velocity.y > 1)
+            {
+                _groundCollider = null;
+            }
         }
+
+
+        public void StopForce()
+        {
+            _velocity = new Vector3(0, 0, 0);
+        }
+
+        public States GetState()
+        {
+            return _state;
+        }
+
+        public void SetState(States newState)
+        {
+            States oldState = _state;
+            _state = newState;
+
+            _signalBus.Fire<UnitStateChangeSignal>(new UnitStateChangeSignal { oldState = oldState, newState = newState });
+        }
+
 
         public Dimension dimension
         {
