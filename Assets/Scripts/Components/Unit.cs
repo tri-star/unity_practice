@@ -9,6 +9,15 @@ namespace ActionSample.Components
     /// </summary>
     public class Unit : MonoBehaviour, IComponent
     {
+
+        //@TODO: Domain層で実装することを検討
+        public enum States
+        {
+            NEUTRAL,
+            WALKING,
+            ATTACK,
+        }
+
         private Vector3 _velocity;
 
         private Animator _animator;
@@ -20,6 +29,7 @@ namespace ActionSample.Components
 
         private Collider _groundCollider;
 
+        private States _state;
 
         [SerializeField]
         protected float speed;
@@ -31,6 +41,7 @@ namespace ActionSample.Components
             this._collider = this.GetComponent<Collider>();
             this._velocity = new Vector3(0, 0, 0);
             this._groundCollider = null;
+            _state = States.NEUTRAL;
         }
 
         public void FixedUpdate()
@@ -42,9 +53,6 @@ namespace ActionSample.Components
                 forceY = Mathf.Max(this._velocity.y - 0.1f, this._maxGravitySpeed);
             }
             this._velocity = new Vector3(this._velocity.x, forceY, this._velocity.z);
-
-            // @TODO: Player固有のコンポーネントに切り出す
-            this._animator.SetBool("isWalking", (Mathf.Abs(this._velocity.x) > 0 || Mathf.Abs(this._velocity.z) > 0));
 
             // @TODO: 左右反転をシェーダーの中で行う
             //this.transform.localScale = new Vector3(this.velocity.x > 0 ? 1.0f : -1, 1.0f, 1.0f);
@@ -88,6 +96,18 @@ namespace ActionSample.Components
             this._velocity = new Vector3(newX, this._velocity.y, newZ);
         }
 
+
+        public States state
+        {
+            get { return _state; }
+            set { _state = value; }
+        }
+
+        public Vector3 velocity
+        {
+            get { return _velocity; }
+            set { _velocity = value; }
+        }
 
         /// <summary>
         /// ユニットが着地しているかを返す
