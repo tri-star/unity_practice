@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15e160e9c85d1f849ae4771fc4a73ffa, type: 3}
   m_Name: Enemy02Health
   m_EditorClassIdentifier: 
-  hp: 0
-  power: 0
+  hp: 500
+  power: 10
