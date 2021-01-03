@@ -83,6 +83,10 @@ namespace ActionSample.Components
 
         public void OnUnitDamage(UnitDamageSignal signal)
         {
+            if (signal.target != _unit)
+            {
+                return;
+            }
             if (TrySetState(Unit.States.DAMAGE))
             {
                 _unit.AddForce(signal.force);

@@ -97,6 +97,7 @@ namespace ActionSample.Components
                 // @TODO: 攻撃に関する情報は攻撃者のGameObjectから取得する
                 _signalBus.Fire<UnitDamageSignal>(new UnitDamageSignal()
                 {
+                    target = this,
                     damage = 2000,
                     force = new Vector3(2.0f * (attacker.dimension == Dimension.LEFT ? -1 : 1), 20.0f, 0)
                 });

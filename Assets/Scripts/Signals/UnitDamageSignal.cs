@@ -1,8 +1,11 @@
 
+using ActionSample.Components;
 using UnityEngine;
 
 public class UnitDamageSignal
 {
+    public Unit target;
+
     public float damage;
 
     public Vector3 force;
