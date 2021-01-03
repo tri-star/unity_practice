@@ -1,25 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
+using ActionSample.Signals;
 using UnityEngine;
+using Zenject;
 
-public class ActionButton : MonoBehaviour
+namespace ActionSample.Components.Ui
 {
-    private Animator _animator;
-
-    public void Start()
+    public class ActionButton : MonoBehaviour
     {
-        _animator = GetComponent<Animator>();
-    }
+        [Inject]
+        private SignalBus _signalBus;
 
-    public void OnMouseDown()
-    {
-        Debug.Log("Pressed");
-        _animator.SetBool("isPressed", true);
-    }
+        private Animator _animator;
 
-    public void OnMouseUp()
-    {
-        _animator.SetBool("isPressed", false);
-    }
 
+        public void Start()
+        {
+            _animator = GetComponent<Animator>();
+        }
+
+        public void OnMouseDown()
+        {
+            _animator.SetBool("isPressed", true);
+            OnButtonPressed();
+        }
+
+        public void OnMouseUp()
+        {
+            _animator.SetBool("isPressed", false);
+        }
+
+
+        private void OnButtonPressed()
+        {
+            _signalBus.Fire<PlayerAttackSignal>(new PlayerAttackSignal());
+        }
+    }
 }
