@@ -73,9 +73,6 @@ namespace ActionSample.Components
             }
             this._velocity = new Vector3(this._velocity.x, forceY, this._velocity.z);
 
-            // @TODO: 左右反転をシェーダーの中で行う
-            //this.transform.localScale = new Vector3(this.velocity.x > 0 ? 1.0f : -1, 1.0f, 1.0f);
-
             this.transform.Translate(this._velocity);
         }
 
