@@ -18,6 +18,12 @@ namespace ActionSample.Components
             ATTACK,
         }
 
+        public enum Dimension
+        {
+            LEFT,
+            RIGHT
+        }
+
         private Vector3 _velocity;
 
         private Animator _animator;
@@ -30,6 +36,9 @@ namespace ActionSample.Components
         private Collider _groundCollider;
 
         private States _state;
+
+        [SerializeField]
+        private Dimension _dimension;
 
         [SerializeField]
         protected float speed;
@@ -94,6 +103,15 @@ namespace ActionSample.Components
             float newX = x * this.speed;
             float newZ = z * this.speed;
             this._velocity = new Vector3(newX, this._velocity.y, newZ);
+
+            if (newX < 0)
+            {
+                _dimension = Dimension.LEFT;
+            }
+            else if (newX > 0)
+            {
+                _dimension = Dimension.RIGHT;
+            }
         }
 
 
@@ -101,6 +119,12 @@ namespace ActionSample.Components
         {
             get { return _state; }
             set { _state = value; }
+        }
+
+        public Dimension dimension
+        {
+            get { return _dimension; }
+            set { _dimension = value; }
         }
 
         public Vector3 velocity

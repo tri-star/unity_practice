@@ -57,6 +57,15 @@ namespace ActionSample.Components
                     }
                     break;
             }
+
+            if (_unit.dimension == Unit.Dimension.LEFT)
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else
+            {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
             UpdateAnimator();
         }
 
