@@ -1,14 +1,5 @@
 {
   "dependencies": {
-    "com.kimiguna.pixel-perfect-camera-adjustment": {
-      "version": "https://github.com/Masterexa/PixelPerfectCameraAdjustment.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.render-pipelines.universal": "7.3.1"
-      },
-      "hash": "d5b072f3ba2654f8730efce203062a9e27cee897"
-    },
     "com.unity.2d.animation": {
       "version": "5.0.3",
       "depth": 0,
