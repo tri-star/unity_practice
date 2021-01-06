@@ -6,6 +6,7 @@ namespace ActionSample.Scenes
 {
     public class BattleSceneController : MonoBehaviour
     {
+        [SerializeField]
         Camera _mainCamera;
 
         [SerializeField]
@@ -23,7 +24,6 @@ namespace ActionSample.Scenes
 
         private void Start()
         {
-            this._mainCamera = Component.FindObjectOfType<Camera>();
             this._pixelPerfectCamera = this._mainCamera.GetComponent<PixelPerfectCamera>();
 
             this.BuildWall();
@@ -36,7 +36,7 @@ namespace ActionSample.Scenes
             float screenW = this._pixelPerfectCamera.refResolutionX;
             float screenH = this._pixelPerfectCamera.refResolutionY;
             float worldWidth = 2000;
-            float worldHeight = 360;
+            float worldHeight = 300;
             float cameraX = Mathf.Clamp(this._player.transform.position.x, screenW / 2, worldWidth - (screenW / 2));
             float cameraY = Mathf.Clamp(this._player.transform.position.y, screenH / 2, worldHeight - (screenH / 2));
 
