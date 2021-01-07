@@ -1,11 +1,14 @@
+default_platform(:android)
+
 platform :android do
     lane :adhoc do
         firebase_app_distribution(
             app: ENV["FIREBASE_APP_ID"],
             groups: "developer",
-            release_notes: "test",
             firebase_cli_path: `which firebase`.strip(),
             firebase_cli_token: ENV["FIREBASE_TOKEN"],
+            apk_path: ENV["APK_PATH"],
+            release_notes: "test",
             debug: true
         )
         slack(

@@ -5,35 +5,35 @@ on:
     types: [published]
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    env:
-      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Cache Library
-        uses: actions/cache@v2
-        with:
-          path: Library
-          key: Library
-      - name: Run EditMode and PlayMode Tests
-        uses: game-ci/unity-test-runner@main
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-results
-          path: artifacts
+  # test:
+  #   name: Test
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  #     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+  #     UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Cache Library
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: Library
+  #         key: Library
+  #     - name: Run EditMode and PlayMode Tests
+  #       uses: game-ci/unity-test-runner@main
+  #     - name: Upload Test Results
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: test-results
+  #         path: artifacts
 
   buildAndroidDev:
     name: Build for Android(Dev)
     runs-on: ubuntu-latest
-    needs: test
+    # needs: test
     env:
       UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
       UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
@@ -56,6 +56,11 @@ jobs:
           sudo apt clean
           docker rmi $(docker image ls -aq)
           df -h
+      - name: Restore google-services.json
+        run: |
+          echo "${GOOGLE_SERVICES_JSON}" | base64 -d > Assets/google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       - name: Build Unity Project
         uses: game-ci/unity-builder@main
         with:
@@ -70,15 +75,37 @@ jobs:
       - name: List BuildDir
         run: |
           ls -l builds/Android
-          tree builds/Android
-      # - name: Pilot
-      #   uses: maierj/fastlane-action@v2.0.0
-      #   with:
-      #     lane: android-adhoc
-      #   env:
-      #     SLACK_URL: ${{ secrets.SLACK_URL }}
 
-           
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+
+      - name: install firebase-tools
+        run: npm install -g firebase-tools
+
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+
+      - name: Install fastlane and plugins
+        run: |
+          cd deploy
+          ruby -v
+          gem env
+          gem install bundler -v 2.2.4
+          bundle install
+
+      - name: Adhoc distribution
+        env:
+          SLACK_URL: ${{ secrets.SLACK_URL }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          APK_PATH: "../builds/Android/Android.apk"
+        run: |
+          cd deploy
+          bundle exec fastlane adhoc --verbose
+
+          
 
   # buildiOSDev:
   #   name: Build for iOS(Dev)
