@@ -68,7 +68,17 @@ jobs:
           # androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
           # androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
       - name: List BuildDir
-        run: ls -l builds
+        run: |
+          ls -l builds/Android
+          tree builds/Android
+      # - name: Pilot
+      #   uses: maierj/fastlane-action@v2.0.0
+      #   with:
+      #     lane: android-adhoc
+      #   env:
+      #     SLACK_URL: ${{ secrets.SLACK_URL }}
+
+           
 
   # buildiOSDev:
   #   name: Build for iOS(Dev)
