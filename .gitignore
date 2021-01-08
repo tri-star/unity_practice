@@ -73,3 +73,4 @@ crashlytics-build.properties
 /Recordings/*
 
 google-services.json
+.env

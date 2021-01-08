@@ -86,8 +86,8 @@ jobs:
       - name: Install fastlane and plugins
         run: |
           cd fastlane
-          gem install bundler
-          bundle install
+          sudo gem install bundler
+          sudo bundle install
 
       - name: Adhoc distribution
         env:
