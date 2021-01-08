@@ -96,7 +96,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           APK_PATH: "builds/Android/Android.apk"
-        run:
+        run: |
           cd fastlane
           bundle _2.1.4_ exec fastlane adhoc --verbose
 
