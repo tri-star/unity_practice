@@ -86,9 +86,11 @@ jobs:
       - name: Install fastlane and plugins
         run: |
           cd deploy
-          sudo gem install fastlane
-          gem install fastlane-plugin-firebase_app_distribution --user-install
+          ruby -v
           gem env
+          sudo bundle install
+          sudo gem uninstall fastlane-plugin-firebase_app_distribution
+          gem install fastlane-plugin-firebase_app_distribution --user-install
 
       - name: Adhoc distribution
         env:
