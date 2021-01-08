@@ -86,8 +86,9 @@ jobs:
       - name: Install fastlane and plugins
         run: |
           cd deploy
-          sudo gem install bundler
-          sudo bundle install
+          sudo gem install fastlane
+          gem install fastlane-plugin-firebase_app_distribution --user-install
+          gem env
 
       - name: Adhoc distribution
         env:
@@ -97,7 +98,7 @@ jobs:
           APK_PATH: "builds/Android/Android.apk"
         run: |
           cd deploy
-          bundle exec fastlane adhoc --verbose
+          fastlane adhoc --verbose
 
           
 
