@@ -92,6 +92,7 @@ jobs:
           cd deploy
           ruby -v
           gem env
+          sudo gem install bundler -v 2.2.4
           sudo bundle install
           sudo gem uninstall fastlane-plugin-firebase_app_distribution
           gem install fastlane-plugin-firebase_app_distribution --user-install
