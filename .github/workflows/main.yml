@@ -85,7 +85,7 @@ jobs:
 
       - name: Install fastlane and plugins
         run: |
-          cd fastlane
+          cd deploy
           sudo gem install bundler -v 2.1.4
           sudo bundle _2.1.4_ -v
           sudo bundle _2.1.4_ install
@@ -97,7 +97,7 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           APK_PATH: "builds/Android/Android.apk"
         run: |
-          cd fastlane
+          cd deploy
           bundle _2.1.4_ exec fastlane adhoc --verbose
 
           
