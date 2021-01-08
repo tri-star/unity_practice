@@ -1,3 +1,5 @@
+default_platform(:android)
+
 platform :android do
     lane :adhoc do
         firebase_app_distribution(

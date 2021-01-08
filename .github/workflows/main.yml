@@ -74,10 +74,7 @@ jobs:
           # androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
       - name: List BuildDir
         run: |
-          sudo apt update
-          sudo apt install -y tree
           ls -l builds/Android
-          tree builds/Android
 
       - uses: actions/setup-node@v1
         with:
@@ -86,19 +83,22 @@ jobs:
       - name: install firebase-tools
         run: npm install -g firebase-tools
 
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '= 2.5'
+      - name: Install fastlane and plugins
+        run: |
+          cd fastlane
+          gem install bundler
+          bundle install
 
       - name: Adhoc distribution
-        uses: maierj/fastlane-action@v2.0.0
-        with:
-          lane: android-adhoc
         env:
           SLACK_URL: ${{ secrets.SLACK_URL }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           APK_PATH: "builds/Android/Android.apk"
+        run:
+          cd fastlane
+          bundle exec fastlane adhoc --verbose
+
           
 
   # buildiOSDev:
