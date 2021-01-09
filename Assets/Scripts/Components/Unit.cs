@@ -1,3 +1,4 @@
+using ActionSample.Parameters;
 using ActionSample.Signals;
 using UnityEngine;
 using Zenject;
@@ -34,9 +35,8 @@ namespace ActionSample.Components
 
         private Animator _animator;
 
-        // @TODO: ユニットではなくゲームのパラメータにする
-        [SerializeField]
-        private float _maxGravitySpeed;
+        [Inject]
+        private StageSetting _stageSetting;
 
         private Collider _collider;
 
@@ -64,8 +64,11 @@ namespace ActionSample.Components
             float forceY = _velocity.y;
             if (!this.IsGrounded())
             {
-                // @TODO: 重力加速度はゲーム全体のオプションとして定義する
-                forceY = Mathf.Clamp(this._velocity.y - 1.5f, this._maxGravitySpeed, 20.0f);
+                forceY = Mathf.Clamp(
+                    this._velocity.y + this._stageSetting.gravitySpeed,
+                    this._stageSetting.maxGravitySpeed,
+                    this._stageSetting.maxGravitySpeed * -1
+                );
             }
             else
             {
