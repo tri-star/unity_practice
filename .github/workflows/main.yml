@@ -144,7 +144,10 @@ jobs:
       - name: List BuildDir
         run: |
           ls -l builds/StandaloneWindows
-
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Upload artifact
+          path: builds/StandaloneWindows/
 
   # buildiOSDev:
   #   name: Build for iOS(Dev)
