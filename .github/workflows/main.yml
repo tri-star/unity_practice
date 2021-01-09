@@ -92,7 +92,7 @@ jobs:
           cd deploy
           ruby -v
           gem env
-          sudo gem install bundler -v 2.2.4
+          gem install bundler -v 2.2.4
           bundle install
 
       - name: Adhoc distribution
