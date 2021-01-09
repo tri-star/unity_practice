@@ -100,7 +100,7 @@ jobs:
           SLACK_URL: ${{ secrets.SLACK_URL }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          APK_PATH: "builds/Android/Android.apk"
+          APK_PATH: "../builds/Android/Android.apk"
         run: |
           cd deploy
           bundle exec fastlane adhoc --verbose
