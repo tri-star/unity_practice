@@ -122,7 +122,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: Library
-          key: Library-Windows
+          key: Library-StandaloneWindows
           restore-keys: Library-
       # - name: Free Disk Space for Android
       #   run: |
@@ -139,11 +139,11 @@ jobs:
       - name: Build Unity Project
         uses: game-ci/unity-builder@main
         with:
-          targetPlatform: Windows
+          targetPlatform: StandaloneWindows
           buildsPath: builds         
       - name: List BuildDir
         run: |
-          ls -l builds/Windows
+          ls -l builds/StandaloneWindows
 
 
   # buildiOSDev:
