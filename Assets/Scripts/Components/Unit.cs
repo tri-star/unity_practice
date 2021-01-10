@@ -157,6 +157,7 @@ namespace ActionSample.Components
             _state = newState;
 
             _signalBus.Fire<UnitStateChangeSignal>(new UnitStateChangeSignal { oldState = oldState, newState = newState });
+            OnChangeState(newState);
         }
 
 

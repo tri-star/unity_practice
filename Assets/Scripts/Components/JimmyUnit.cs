@@ -74,6 +74,7 @@ namespace ActionSample.Components
             // @TODO: ダメージ時間もパラメータ化する
             yield return new WaitForSeconds(1.0f);
             TrySetState(Unit.States.NEUTRAL);
+            _damageFlowStarted = false;
         }
 
 
