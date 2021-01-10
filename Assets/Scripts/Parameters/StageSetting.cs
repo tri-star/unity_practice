@@ -14,6 +14,11 @@ namespace ActionSample.Parameters
         /// 重力による加速の最大値
         /// </summary>
         public float maxGravitySpeed;
+
+        /// <summary>
+        /// ダメージを受けた時に加わるデフォルトの加速度
+        /// </summary>
+        public Vector3 defaultDamageForce;
     }
 
 }

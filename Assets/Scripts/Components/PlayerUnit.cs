@@ -1,4 +1,6 @@
 using System;
+using ActionSample.Domain;
+using ActionSample.Parameters;
 using ActionSample.Signals;
 using ActionSample.Utils;
 using UnityEngine;
@@ -11,9 +13,14 @@ namespace ActionSample.Components
         [Inject]
         private SignalBus _signalBus;
 
+        [Inject]
+        StageSetting _stageSetting;
+
         private Animator _animator;
 
         private Unit _unit;
+
+        private Health _health;
 
         [Inject]
         public void Initialize()
@@ -21,6 +28,7 @@ namespace ActionSample.Components
             _animator = GetComponent<Animator>();
             _signalBus.Subscribe<PlayerAttackSignal>(OnAttackEvent);
             _unit = GetComponent<Unit>();
+            _health = GetComponent<Health>();
         }
 
         public void Dispose()
@@ -30,6 +38,16 @@ namespace ActionSample.Components
 
         public void OnAttackEvent(PlayerAttackSignal signal)
         {
+            Vector3 force = _stageSetting.defaultDamageForce;
+            if (_unit.dimension == Unit.Dimension.LEFT)
+            {
+                force = new Vector3(force.x * -1, force.y, force.z);
+            }
+
+            this.GetComponent<Weapon>().damage = new Damage(
+                _health.power,
+                force
+            );
             TrySetState(Unit.States.ATTACK);
         }
 

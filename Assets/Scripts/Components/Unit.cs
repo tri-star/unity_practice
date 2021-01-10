@@ -1,8 +1,10 @@
+using ActionSample.Domain;
 using ActionSample.Parameters;
 using ActionSample.Signals;
 using UnityEngine;
 using Zenject;
 using ActionSampleCollision = ActionSample.Domain.Collision;
+using Collision = UnityEngine.Collision;
 
 namespace ActionSample.Components
 {
@@ -67,7 +69,7 @@ namespace ActionSample.Components
                 forceY = Mathf.Clamp(
                     this._velocity.y + this._stageSetting.gravitySpeed,
                     this._stageSetting.maxGravitySpeed,
-                    this._stageSetting.maxGravitySpeed * -1
+                    999
                 );
             }
             else
@@ -94,12 +96,12 @@ namespace ActionSample.Components
             if (collision.collider.tag == "attack")
             {
                 Unit attacker = collision.collider.gameObject.GetComponentInParent<Unit>();
-                // @TODO: 攻撃に関する情報は攻撃者のGameObjectから取得する
+                Damage damage = collision.collider.gameObject.GetComponentInParent<Weapon>().damage;
                 _signalBus.Fire<UnitDamageSignal>(new UnitDamageSignal()
                 {
                     target = this,
-                    damage = 2000,
-                    force = new Vector3(2.0f * (attacker.dimension == Dimension.LEFT ? -1 : 1), 20.0f, 0)
+                    damage = damage.power,
+                    force = damage.force
                 });
             }
         }
