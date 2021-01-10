@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravitySpeed: -1.5
   maxGravitySpeed: -20
-  defaultDamageForce: {x: 2, y: 20, z: 0}
+  defaultDamageForce: {x: 1, y: 20, z: 0}
