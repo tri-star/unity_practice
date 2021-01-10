@@ -208,6 +208,14 @@ namespace ActionSample.Components
         }
 
         /// <summary>
+        /// 状態が変更された時に呼び出される処理
+        /// </summary>
+        /// <param name="newState">新しい状態</param>
+        protected void OnChangeState(States newState)
+        {
+        }
+
+        /// <summary>
         /// ユニットの状態に応じてAnimatorを更新する
         /// </summary>
         protected void UpdateAnimator()

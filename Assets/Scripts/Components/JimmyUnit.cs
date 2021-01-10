@@ -15,13 +15,11 @@ namespace ActionSample.Components
         public new void Initialize()
         {
             base.Initialize();
-            _signalBus.Subscribe<UnitStateChangeSignal>(OnUnitStateChange);
             _damageFlowStarted = false;
         }
 
         public void Dispose()
         {
-            _signalBus.Unsubscribe<UnitStateChangeSignal>(OnUnitStateChange);
         }
 
         public void Update()
@@ -61,9 +59,9 @@ namespace ActionSample.Components
         }
 
 
-        public void OnUnitStateChange(UnitStateChangeSignal signal)
+        protected new void OnChangeState(States newState)
         {
-            switch (signal.newState)
+            switch (newState)
             {
                 case Unit.States.DAMAGE:
                     _damageFlowStarted = false;
