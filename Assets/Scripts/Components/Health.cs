@@ -8,10 +8,10 @@ namespace ActionSample.Components
         [SerializeField]
         private HealthSetting _initialHealth;
 
-        private double _currentHp;
+        private float _currentHp;
 
-        private double _maxHp;
-        private double _power;
+        private float _maxHp;
+        private float _power;
 
         public void Start()
         {
@@ -20,11 +20,11 @@ namespace ActionSample.Components
             _power = _initialHealth.power;
         }
 
-        public double currentHp { get { return _currentHp; } }
+        public float currentHp { get { return _currentHp; } }
 
-        public double maxHp { get { return _maxHp; } }
+        public float maxHp { get { return _maxHp; } }
 
-        public double power { get { return _power; } }
+        public float power { get { return _power; } }
     }
 
 }
