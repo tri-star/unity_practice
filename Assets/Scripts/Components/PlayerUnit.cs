@@ -8,26 +8,15 @@ using Zenject;
 
 namespace ActionSample.Components
 {
-    public class PlayerUnit : MonoBehaviour, IInitializable, IDisposable
+    public class PlayerUnit : Unit, IDisposable
     {
-        [Inject]
-        private SignalBus _signalBus;
-
-        [Inject]
-        StageSetting _stageSetting;
-
-        private Animator _animator;
-
-        private Unit _unit;
-
         private Health _health;
 
         [Inject]
-        public void Initialize()
+        public new void Initialize()
         {
-            _animator = GetComponent<Animator>();
+            base.Initialize();
             _signalBus.Subscribe<PlayerAttackSignal>(OnAttackEvent);
-            _unit = GetComponent<Unit>();
             _health = GetComponent<Health>();
         }
 
@@ -39,7 +28,7 @@ namespace ActionSample.Components
         public void OnAttackEvent(PlayerAttackSignal signal)
         {
             Vector3 force = _stageSetting.defaultDamageForce;
-            if (_unit.dimension == Unit.Dimension.LEFT)
+            if (dimension == Unit.Dimension.LEFT)
             {
                 force = new Vector3(force.x * -1, force.y, force.z);
             }
@@ -52,18 +41,20 @@ namespace ActionSample.Components
         }
 
 
-        public void Update()
+        public new void FixedUpdate()
         {
-            switch (_unit.GetState())
+            base.FixedUpdate();
+
+            switch (GetState())
             {
                 case Unit.States.WALKING:
-                    if (Mathf.Abs(_unit.velocity.x) == 0 && Mathf.Abs(_unit.velocity.z) == 0)
+                    if (Mathf.Abs(velocity.x) == 0 && Mathf.Abs(velocity.z) == 0)
                     {
                         TrySetState(Unit.States.NEUTRAL);
                     }
                     break;
                 case Unit.States.NEUTRAL:
-                    if (Mathf.Abs(_unit.velocity.x) > 0 || Mathf.Abs(_unit.velocity.z) > 0)
+                    if (Mathf.Abs(velocity.x) > 0 || Mathf.Abs(velocity.z) > 0)
                     {
                         TrySetState(Unit.States.WALKING);
                     }
@@ -76,7 +67,7 @@ namespace ActionSample.Components
                     break;
             }
 
-            if (_unit.dimension == Unit.Dimension.LEFT)
+            if (dimension == Unit.Dimension.LEFT)
             {
                 transform.localScale = new Vector3(-1, 1, 1);
             }
@@ -87,20 +78,10 @@ namespace ActionSample.Components
             UpdateAnimator();
         }
 
-        private bool TrySetState(Unit.States newState)
-        {
-            if (CanTransitionState(newState))
-            {
-                _unit.SetState(newState);
-                return true;
-            }
-            return false;
-        }
-
-        private bool CanTransitionState(Unit.States newState)
+        protected new bool CanTransitionState(Unit.States newState)
         {
             // @TODO: ドメインに関する実装として切り出す
-            switch (_unit.GetState())
+            switch (GetState())
             {
                 case Unit.States.NEUTRAL:
                     return true;
@@ -119,13 +100,13 @@ namespace ActionSample.Components
                     }
                     return true;
             }
-            throw new NotSupportedException($"無効な状態が指定されました: {_unit.GetState()}");
+            throw new NotSupportedException($"無効な状態が指定されました: {GetState()}");
         }
 
 
-        private void UpdateAnimator()
+        protected new void UpdateAnimator()
         {
-            switch (_unit.GetState())
+            switch (GetState())
             {
                 case Unit.States.WALKING:
                     _animator.SetBool("isAttacking", false);

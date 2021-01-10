@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UnitDamageSignal
 {
-    public Unit target;
+    public IUnit target;
 
     public float damage;
 

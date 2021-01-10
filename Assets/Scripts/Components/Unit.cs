@@ -12,7 +12,7 @@ namespace ActionSample.Components
     /// ゲーム中で画面に表示されるオブジェクトが持つコンポーネント
     /// 標準では重力の影響を受ける。重力の影響を受けないものはプロパティなどで指定して管理する予定
     /// </summary>
-    public class Unit : MonoBehaviour, IComponent
+    public class Unit : MonoBehaviour, IUnit, IInitializable, IComponent
     {
 
         //@TODO: Domain層で実装することを検討
@@ -31,28 +31,28 @@ namespace ActionSample.Components
         }
 
         [Inject]
-        private SignalBus _signalBus;
+        protected SignalBus _signalBus;
 
-        private Vector3 _velocity;
+        protected Vector3 _velocity;
 
-        private Animator _animator;
+        protected Animator _animator;
 
         [Inject]
-        private StageSetting _stageSetting;
+        protected StageSetting _stageSetting;
 
-        private Collider _collider;
+        protected Collider _collider;
 
-        private Collider _groundCollider;
+        protected Collider _groundCollider;
 
-        private States _state;
+        protected States _state;
 
         [SerializeField]
-        private Dimension _dimension;
+        protected Dimension _dimension;
 
         [SerializeField]
         protected float speed;
 
-        public void Start()
+        public void Initialize()
         {
             this._animator = this.GetComponent<Animator>();
             this._collider = this.GetComponent<Collider>();
@@ -92,17 +92,6 @@ namespace ActionSample.Components
                 {
                     StopForce();
                 }
-            }
-            if (collision.collider.tag == "attack")
-            {
-                Unit attacker = collision.collider.gameObject.GetComponentInParent<Unit>();
-                Damage damage = collision.collider.gameObject.GetComponentInParent<Weapon>().damage;
-                _signalBus.Fire<UnitDamageSignal>(new UnitDamageSignal()
-                {
-                    target = this,
-                    damage = damage.power,
-                    force = damage.force
-                });
             }
         }
 
@@ -190,6 +179,39 @@ namespace ActionSample.Components
         public bool IsGrounded()
         {
             return this._groundCollider == null ? false : true;
+        }
+
+
+        /// <summary>
+        /// 指定された状態への遷移が可能かどうかを調べて可能な場合に状態遷移する
+        /// </summary>
+        /// <param name="newState">遷移したい状態の値</param>
+        /// <returns>状態遷移が出来たかどうか</returns>
+        public bool TrySetState(Unit.States newState)
+        {
+            if (CanTransitionState(newState))
+            {
+                SetState(newState);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 指定された状態に遷移可能かを返す
+        /// </summary>
+        /// <param name="newState">遷移したい状態の値</param>
+        /// <returns>状態遷移可能かどうか</returns>
+        protected bool CanTransitionState(Unit.States newState)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// ユニットの状態に応じてAnimatorを更新する
+        /// </summary>
+        protected void UpdateAnimator()
+        {
         }
 
 
