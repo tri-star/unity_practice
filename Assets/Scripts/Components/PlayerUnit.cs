@@ -33,7 +33,7 @@ namespace ActionSample.Components
                 force = new Vector3(force.x * -1, force.y, force.z);
             }
 
-            this.GetComponent<Weapon>().weaponPower = new WeaponPower(
+            this.GetComponent<CombatUnit>().weaponPower = new WeaponPower(
                 _health.power,
                 force
             );

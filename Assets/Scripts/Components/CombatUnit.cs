@@ -10,6 +10,14 @@ namespace ActionSample.Components
     {
         private IUnit _unit;
 
+        /// <summary>
+        /// 攻撃によるダメージの情報
+        /// </summary>
+        public WeaponPower weaponPower
+        {
+            get; set;
+        }
+
         [Inject]
         public void Initialize()
         {
@@ -29,7 +37,7 @@ namespace ActionSample.Components
             if (collision.collider.tag == "attack")
             {
                 Unit attacker = collision.collider.gameObject.GetComponentInParent<Unit>();
-                WeaponPower weaponPower = collision.collider.gameObject.GetComponentInParent<Weapon>().weaponPower;
+                WeaponPower weaponPower = collision.collider.gameObject.GetComponentInParent<CombatUnit>().weaponPower;
 
                 if (_unit.TrySetState(Unit.States.DAMAGE))
                 {
