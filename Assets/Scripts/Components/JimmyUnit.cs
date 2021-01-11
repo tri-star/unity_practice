@@ -11,11 +11,14 @@ namespace ActionSample.Components
     {
         private bool _damageFlowStarted;
 
+        private bool _deadFlowStarted;
+
         [Inject]
         public new void Initialize()
         {
             base.Initialize();
             _damageFlowStarted = false;
+            _deadFlowStarted = false;
         }
 
         public void Dispose()
@@ -43,6 +46,13 @@ namespace ActionSample.Components
                     {
                         _damageFlowStarted = true;
                         StartCoroutine(DamageStateFlow());
+                    }
+                    break;
+                case Unit.States.DEAD:
+                    if (!_deadFlowStarted)
+                    {
+                        _deadFlowStarted = true;
+                        StartCoroutine(DeadStateFlow());
                     }
                     break;
             }
@@ -78,6 +88,14 @@ namespace ActionSample.Components
         }
 
 
+        private IEnumerator DeadStateFlow()
+        {
+            affectGravity = false;
+            yield return new WaitForSeconds(3.0f);
+            Destroy(gameObject);
+        }
+
+
         protected new void UpdateAnimator()
         {
             _animator.SetBool("isAttacking", false);
@@ -92,6 +110,7 @@ namespace ActionSample.Components
                     _animator.SetBool("isAttacking", true);
                     break;
                 case Unit.States.DAMAGE:
+                case Unit.States.DEAD:
                     _animator.SetBool("isDamaged", true);
                     break;
             }

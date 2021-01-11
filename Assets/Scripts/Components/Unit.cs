@@ -23,6 +23,7 @@ namespace ActionSample.Components
             WALKING,
             ATTACK,
             DAMAGE,
+            DEAD,
         }
 
         public enum Dimension
@@ -33,6 +34,9 @@ namespace ActionSample.Components
 
         [Inject]
         protected SignalBus _signalBus;
+
+        [SerializeField]
+        protected bool affectGravity = true;
 
         protected Vector3 _velocity;
 
@@ -65,17 +69,23 @@ namespace ActionSample.Components
         public void FixedUpdate()
         {
             float forceY = _velocity.y;
-            if (!this.IsGrounded())
+
+            // @TODO: Gravityコンポーネントに切り出すことを検討
+            if (affectGravity)
             {
-                forceY = Mathf.Clamp(
-                    this._velocity.y + this._stageSetting.gravitySpeed,
-                    this._stageSetting.maxGravitySpeed,
-                    999
-                );
-            }
-            else
-            {
-                forceY = 0;
+                if (!this.IsGrounded())
+                {
+                    forceY = Mathf.Clamp(
+                        this._velocity.y + this._stageSetting.gravitySpeed,
+                        this._stageSetting.maxGravitySpeed,
+                        999
+                    );
+                }
+                else
+                {
+                    forceY = Mathf.Max(0, forceY);
+                }
+
             }
             this._velocity = new Vector3(this._velocity.x, forceY, this._velocity.z);
 
@@ -174,6 +184,12 @@ namespace ActionSample.Components
             set { _velocity = value; }
         }
 
+        public bool AffectGravity
+        {
+            get { return affectGravity; }
+            set { affectGravity = value; }
+        }
+
         /// <summary>
         /// ユニットが着地しているかを返す
         /// </summary>
@@ -225,6 +241,8 @@ namespace ActionSample.Components
                         return false;
                     }
                     return true;
+                case Unit.States.DEAD:
+                    return false;
             }
             throw new NotSupportedException($"無効な状態が指定されました: {GetState()}");
         }

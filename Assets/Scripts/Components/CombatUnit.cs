@@ -38,10 +38,14 @@ namespace ActionSample.Components
             {
                 Unit attacker = collision.collider.gameObject.GetComponentInParent<Unit>();
                 WeaponPower weaponPower = collision.collider.gameObject.GetComponentInParent<CombatUnit>().weaponPower;
+                Health health = GetComponent<Health>();
 
                 if (_unit.TrySetState(Unit.States.DAMAGE))
                 {
                     _unit.AddForce(weaponPower.force);
+
+                    // @TODO: ダメージ計算用のサービスを用意してダメージ計算を行う
+                    health.TakeDamage(weaponPower.power);
                 }
             }
         }

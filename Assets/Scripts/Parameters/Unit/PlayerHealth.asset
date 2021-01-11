@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PlayerHealth
   m_EditorClassIdentifier: 
   hp: 100000
-  power: 10
+  power: 1000

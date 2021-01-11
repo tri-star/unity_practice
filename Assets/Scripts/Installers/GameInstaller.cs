@@ -13,6 +13,7 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         Container.DeclareSignal<PlayerAttackSignal>().OptionalSubscriber();
         Container.DeclareSignal<UnitStateChangeSignal>().OptionalSubscriber();
         Container.DeclareSignal<UnitDamageSignal>().OptionalSubscriber();
+        Container.DeclareSignal<UnitKilledSignal>().OptionalSubscriber();
 
         Container.Bind<ActionButton>().AsTransient();
 
