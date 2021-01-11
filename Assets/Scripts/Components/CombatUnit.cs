@@ -16,11 +16,11 @@ namespace ActionSample.Components
             _unit = GetComponent<IUnit>();
         }
 
-        public void Damage(Damage damage)
+        public void Damage(WeaponPower weaponPower)
         {
             if (_unit.TrySetState(Unit.States.DAMAGE))
             {
-                _unit.AddForce(damage.force);
+                _unit.AddForce(weaponPower.force);
             }
         }
 
@@ -29,11 +29,11 @@ namespace ActionSample.Components
             if (collision.collider.tag == "attack")
             {
                 Unit attacker = collision.collider.gameObject.GetComponentInParent<Unit>();
-                Damage damage = collision.collider.gameObject.GetComponentInParent<Weapon>().damage;
+                WeaponPower weaponPower = collision.collider.gameObject.GetComponentInParent<Weapon>().weaponPower;
 
                 if (_unit.TrySetState(Unit.States.DAMAGE))
                 {
-                    _unit.AddForce(damage.force);
+                    _unit.AddForce(weaponPower.force);
                 }
             }
         }

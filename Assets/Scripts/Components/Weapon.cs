@@ -8,7 +8,7 @@ namespace ActionSample.Components
         /// <summary>
         /// 攻撃によるダメージの情報
         /// </summary>
-        public Damage damage
+        public WeaponPower weaponPower
         {
             get; set;
         }
