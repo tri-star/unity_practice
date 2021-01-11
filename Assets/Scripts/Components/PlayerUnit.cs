@@ -78,32 +78,6 @@ namespace ActionSample.Components
             UpdateAnimator();
         }
 
-        protected new bool CanTransitionState(Unit.States newState)
-        {
-            // @TODO: ドメインに関する実装として切り出す
-            switch (GetState())
-            {
-                case Unit.States.NEUTRAL:
-                    return true;
-                case Unit.States.WALKING:
-                    return true;
-                case Unit.States.ATTACK:
-                    if (newState == Unit.States.WALKING)
-                    {
-                        return false;
-                    }
-                    return true;
-                case Unit.States.DAMAGE:
-                    if (newState != Unit.States.NEUTRAL)
-                    {
-                        return false;
-                    }
-                    return true;
-            }
-            throw new NotSupportedException($"無効な状態が指定されました: {GetState()}");
-        }
-
-
         protected new void UpdateAnimator()
         {
             switch (GetState())

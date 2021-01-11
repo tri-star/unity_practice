@@ -1,3 +1,4 @@
+using System;
 using ActionSample.Domain;
 using ActionSample.Parameters;
 using ActionSample.Signals;
@@ -205,7 +206,27 @@ namespace ActionSample.Components
         /// <returns>状態遷移可能かどうか</returns>
         protected bool CanTransitionState(Unit.States newState)
         {
-            return true;
+            // @TODO: ドメインに関する実装として切り出す
+            switch (GetState())
+            {
+                case Unit.States.NEUTRAL:
+                    return true;
+                case Unit.States.WALKING:
+                    return true;
+                case Unit.States.ATTACK:
+                    if (newState == Unit.States.WALKING)
+                    {
+                        return false;
+                    }
+                    return true;
+                case Unit.States.DAMAGE:
+                    if (newState != Unit.States.NEUTRAL)
+                    {
+                        return false;
+                    }
+                    return true;
+            }
+            throw new NotSupportedException($"無効な状態が指定されました: {GetState()}");
         }
 
         /// <summary>
