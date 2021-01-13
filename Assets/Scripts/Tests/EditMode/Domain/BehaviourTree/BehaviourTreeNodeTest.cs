@@ -1,9 +1,12 @@
 
 using System.Collections.Generic;
 using ActionSample.Components;
+using ActionSample.Domain;
 using ActionSample.Domain.BehaviourTree;
+using ActionSample.Infrastructure.RandomGenerator;
 using NUnit.Framework;
 using UnityEngine;
+using Zenject;
 
 namespace Tests.EditMode.Domain.BehaviourTree
 {
@@ -14,24 +17,31 @@ namespace Tests.EditMode.Domain.BehaviourTree
         {
             _isSatisfied = isSatisfied;
         }
-        public bool isSatisfied(IUnit unit)
+        public bool isSatisfied(GameContext context, IUnit unit)
         {
             return _isSatisfied;
         }
     }
 
-    class BehaviourConditionAndTest
+    class BaseTestCase : ZenjectUnitTestFixture
     {
+        protected GameObject gameObject;
 
-        private GameObject _gameObject;
+        protected GameContext gameContext;
 
         [SetUp]
-        public void SetUp()
+        public void CommonInstall()
         {
-            _gameObject = new GameObject();
-            _gameObject.AddComponent<PlayerUnit>();
-        }
+            gameObject = new GameObject();
+            gameObject.AddComponent<PlayerUnit>();
 
+            GameContext context = EditModeUtil.CreateGameContext();
+            Container.Bind<GameContext>().FromInstance(context).AsSingle();
+        }
+    }
+
+    class BehaviourConditionAndTest : BaseTestCase
+    {
         [Test]
         public void _全ての条件がTRUEを返した場合__TRUEを返す()
         {
@@ -42,9 +52,9 @@ namespace Tests.EditMode.Domain.BehaviourTree
                 new BehaviourConditionStub(true)
             };
 
-            var dummyUnit = _gameObject.GetComponent<IUnit>();
+            var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.And(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
 
         [Test]
@@ -57,9 +67,9 @@ namespace Tests.EditMode.Domain.BehaviourTree
                 new BehaviourConditionStub(true)
             };
 
-            var dummyUnit = _gameObject.GetComponent<IUnit>();
+            var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.And(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(dummyUnit), Is.EqualTo(false));
+            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(false));
         }
 
         [Test]
@@ -69,24 +79,15 @@ namespace Tests.EditMode.Domain.BehaviourTree
             {
             };
 
-            var dummyUnit = _gameObject.GetComponent<IUnit>();
+            var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.And(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
     }
 
 
-    class BehaviourConditionOrTest
+    class BehaviourConditionOrTest : BaseTestCase
     {
-        private GameObject _gameObject;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _gameObject = new GameObject();
-            _gameObject.AddComponent<PlayerUnit>();
-        }
-
         [Test]
         public void _全ての条件がTRUEを返した場合__TRUEを返す()
         {
@@ -97,9 +98,9 @@ namespace Tests.EditMode.Domain.BehaviourTree
                 new BehaviourConditionStub(true)
             };
 
-            var dummyUnit = _gameObject.GetComponent<IUnit>();
+            var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Or(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
 
         [Test]
@@ -112,9 +113,9 @@ namespace Tests.EditMode.Domain.BehaviourTree
                 new BehaviourConditionStub(true)
             };
 
-            var dummyUnit = _gameObject.GetComponent<IUnit>();
+            var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Or(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
 
         [Test]
@@ -127,9 +128,9 @@ namespace Tests.EditMode.Domain.BehaviourTree
                 new BehaviourConditionStub(false)
             };
 
-            var dummyUnit = _gameObject.GetComponent<IUnit>();
+            var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Or(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(dummyUnit), Is.EqualTo(false));
+            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(false));
         }
 
         [Test]
@@ -139,32 +140,23 @@ namespace Tests.EditMode.Domain.BehaviourTree
             {
             };
 
-            var dummyUnit = _gameObject.GetComponent<IUnit>();
+            var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Or(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
     }
 
 
-    class BehaviourConditionNotTest
+    class BehaviourConditionNotTest : BaseTestCase
     {
-        private GameObject _gameObject;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _gameObject = new GameObject();
-            _gameObject.AddComponent<PlayerUnit>();
-        }
-
         [Test]
         public void _渡した条件がTRUEを返した場合__FALSEを返す()
         {
             IBehaviourCondition inputCondition = new BehaviourConditionStub(true);
 
-            var dummyUnit = _gameObject.GetComponent<IUnit>();
+            var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Not(inputCondition);
-            Assert.That<bool>(behaviourCondition.isSatisfied(dummyUnit), Is.EqualTo(false));
+            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(false));
         }
 
         [Test]
@@ -172,9 +164,9 @@ namespace Tests.EditMode.Domain.BehaviourTree
         {
             IBehaviourCondition inputCondition = new BehaviourConditionStub(false);
 
-            var dummyUnit = _gameObject.GetComponent<IUnit>();
+            var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Not(inputCondition);
-            Assert.That<bool>(behaviourCondition.isSatisfied(dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
     }
 

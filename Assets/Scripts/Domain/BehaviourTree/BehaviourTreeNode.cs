@@ -56,9 +56,9 @@ namespace ActionSample.Domain.BehaviourTree
             this._children = new List<BehaviourTreeNode>();
         }
 
-        public bool isSatisfied(IUnit unit)
+        public bool isSatisfied(GameContext context, IUnit unit)
         {
-            return condition?.isSatisfied(unit) ?? true;
+            return condition?.isSatisfied(context, unit) ?? true;
         }
 
         public bool HavePlan()
@@ -90,7 +90,7 @@ namespace ActionSample.Domain.BehaviourTree
         /// 条件を満たすものが複数存在した場合、weightに応じてランダムに選択して返す。
         /// </summary>
         /// <param name="unit"></param>
-        public BehaviourTreeNode? GetSatisfiedNode(IUnit unit)
+        public BehaviourTreeNode? GetSatisfiedNode(GameContext context, IUnit unit)
         {
             if (_children.Count == 0)
             {
@@ -102,8 +102,8 @@ namespace ActionSample.Domain.BehaviourTree
                 weightTotal += child.weight;
             }
 
-            // @TODO: 乱数ジェネレータを外部から注入する
-            int randomValue = Random.Range(0, weightTotal);
+            var randomGenerator = context.RandomGeneratorManager.Get("Game");
+            int randomValue = (int)randomGenerator.FromRange(0, weightTotal);
             int currentWeight = 0;
             BehaviourTreeNode? selectedNode = null;
 

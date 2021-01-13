@@ -11,10 +11,17 @@ namespace ActionSample.Infrastructure.RandomGenerator
 
         public RandomGeneratorUnity(int seed)
         {
+            Init(seed);
+        }
+
+
+        public void Init(int seed)
+        {
             this.seed = seed;
             Random.InitState(seed);
             state = Random.state;
         }
+
 
         public float FromRange(float min, float max)
         {

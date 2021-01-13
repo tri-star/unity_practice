@@ -10,7 +10,7 @@ namespace ActionSample.Domain.BehaviourTree
         /// </summary>
         /// <param name="unit">判定の対象になるユニット</param>
         /// <returns>条件を満たしたかどうか</returns>
-        bool isSatisfied(Components.IUnit unit);
+        bool isSatisfied(GameContext context, Components.IUnit unit);
     }
 
     /// <summary>
@@ -21,7 +21,7 @@ namespace ActionSample.Domain.BehaviourTree
     public abstract class BehaviourCondition : IBehaviourCondition
     {
         /// <see cref="IBehaviourCondition"/>
-        public abstract bool isSatisfied(Components.IUnit unit);
+        public abstract bool isSatisfied(GameContext context, Components.IUnit unit);
 
         /// <summary>
         /// 渡された条件全てをANDで判定するConditionを返すファクトリメソッド
@@ -64,13 +64,13 @@ namespace ActionSample.Domain.BehaviourTree
             _conditions = conditions;
         }
 
-        public bool isSatisfied(IUnit unit)
+        public bool isSatisfied(GameContext context, IUnit unit)
         {
             bool isAllSatisfied = true;
 
             foreach (var condition in _conditions)
             {
-                if (!condition.isSatisfied(unit))
+                if (!condition.isSatisfied(context, unit))
                 {
                     isAllSatisfied = false;
                 }
@@ -92,7 +92,7 @@ namespace ActionSample.Domain.BehaviourTree
             _conditions = conditions;
         }
 
-        public bool isSatisfied(IUnit unit)
+        public bool isSatisfied(GameContext context, IUnit unit)
         {
             bool isSatisfied = false;
 
@@ -103,7 +103,7 @@ namespace ActionSample.Domain.BehaviourTree
 
             foreach (var condition in _conditions)
             {
-                if (condition.isSatisfied(unit))
+                if (condition.isSatisfied(context, unit))
                 {
                     isSatisfied = true;
                     break;
@@ -126,9 +126,9 @@ namespace ActionSample.Domain.BehaviourTree
             _condition = condition;
         }
 
-        public bool isSatisfied(IUnit unit)
+        public bool isSatisfied(GameContext context, IUnit unit)
         {
-            return !_condition.isSatisfied(unit);
+            return !_condition.isSatisfied(context, unit);
         }
     }
 }

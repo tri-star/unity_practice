@@ -12,6 +12,10 @@ namespace ActionSample.Infrastructure.RandomGenerator
             values = new Queue<float>();
         }
 
+        public void Init(int seed)
+        {
+        }
+
         public float FromRange(float min, float max)
         {
             if (values.Count == 0)

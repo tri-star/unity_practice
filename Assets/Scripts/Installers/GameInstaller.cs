@@ -1,5 +1,7 @@
 
 using ActionSample.Components.Ui;
+using ActionSample.Domain;
+using ActionSample.Infrastructure.RandomGenerator;
 using ActionSample.Parameters;
 using ActionSample.Signals;
 using Zenject;
@@ -18,8 +20,16 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         Container.Bind<ActionButton>().AsTransient();
 
         InstallStageSetting();
+        InstallGameContext();
     }
 
+
+    private void InstallGameContext()
+    {
+        GameContext context = new GameContext();
+        context.RandomGeneratorManager.Add("Game", new RandomGeneratorUnity(100));
+        Container.Bind<GameContext>().FromInstance(context).AsSingle();
+    }
 
     private void InstallStageSetting()
     {

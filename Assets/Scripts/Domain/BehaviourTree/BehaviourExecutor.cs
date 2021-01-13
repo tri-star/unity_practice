@@ -13,7 +13,7 @@ namespace ActionSample.Domain.BehaviourTree
             _tree = tree;
         }
 
-        public IBehaviourPlan? Execute(IUnit unit)
+        public IBehaviourPlan? Execute(GameContext context, IUnit unit)
         {
             BehaviourTreeNode? cursor = _tree;
 
@@ -25,7 +25,7 @@ namespace ActionSample.Domain.BehaviourTree
                 {
                     return cursor.plan;
                 }
-                cursor = cursor.GetSatisfiedNode(unit);
+                cursor = cursor.GetSatisfiedNode(context, unit);
                 if (cursor == null)
                 {
                     throw new PlanNotFoundException("プランが見つかりませんでした: ");
