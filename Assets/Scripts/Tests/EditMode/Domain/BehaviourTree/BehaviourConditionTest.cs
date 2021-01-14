@@ -11,14 +11,14 @@ namespace Tests.EditMode.Domain.BehaviourTree
 {
     class BehaviourConditionStub : IBehaviourCondition
     {
-        private bool isSatisfied;
+        private bool isSatisfiedFlag;
         public BehaviourConditionStub(bool isSatisfied)
         {
-            isSatisfied = isSatisfied;
+            isSatisfiedFlag = isSatisfied;
         }
         public bool isSatisfied(GameContext context, IUnit unit)
         {
-            return isSatisfied;
+            return isSatisfiedFlag;
         }
     }
 

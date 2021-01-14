@@ -47,13 +47,18 @@ namespace ActionSample.Domain.BehaviourTree
         /// </summary>
         public IBehaviourPlan? plan { get; private set; }
 
-        public BehaviourTreeNode(string name, int weight, IBehaviourCondition? condition, IBehaviourPlan? plan)
+        public BehaviourTreeNode(
+            string name,
+            int weight = 10,
+            List<BehaviourTreeNode>? children = null,
+            IBehaviourCondition? condition = null,
+            IBehaviourPlan? plan = null)
         {
             this.name = name;
             this.weight = weight;
             this.condition = condition;
             this.plan = plan;
-            this._children = new List<BehaviourTreeNode>();
+            this._children = children == null ? new List<BehaviourTreeNode>() : children;
         }
 
         public bool isSatisfied(GameContext context, IUnit unit)
@@ -66,13 +71,13 @@ namespace ActionSample.Domain.BehaviourTree
             return plan != null;
         }
 
-        public void appendChild(BehaviourTreeNode child)
+        public void AppendChild(BehaviourTreeNode child)
         {
             _children.Add(child);
         }
 
 
-        public void addNodes(BehaviourTreeNode[] children)
+        public void AddNodes(BehaviourTreeNode[] children)
         {
             foreach (var child in children)
             {
@@ -123,7 +128,7 @@ namespace ActionSample.Domain.BehaviourTree
 
     public class RootBehaviourTreeNode : BehaviourTreeNode
     {
-        public RootBehaviourTreeNode() : base("ルートノード", 0, null, null)
+        public RootBehaviourTreeNode(List<BehaviourTreeNode> children) : base("ルートノード", 0, children, null, null)
         {
         }
     }
