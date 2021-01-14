@@ -3,16 +3,6 @@ using ActionSample.Components;
 
 namespace ActionSample.Domain.BehaviourTree
 {
-    public interface IBehaviourCondition
-    {
-        /// <summary>
-        /// 条件を満たしたかどうかの判定を行う
-        /// </summary>
-        /// <param name="unit">判定の対象になるユニット</param>
-        /// <returns>条件を満たしたかどうか</returns>
-        bool isSatisfied(GameContext context, Components.IUnit unit);
-    }
-
     /// <summary>
     /// 前提条件を満たしているかの判定を行うためのクラス
     ///
@@ -49,86 +39,86 @@ namespace ActionSample.Domain.BehaviourTree
         {
             return new BehaviourConditionNot(condition);
         }
-    }
 
 
-    /// <summary>
-    /// 渡された条件が全てtrueかどうかを判定するクラス
-    /// </summary>
-    public class BehaviourConditionAnd : IBehaviourCondition
-    {
-        private List<IBehaviourCondition> _conditions;
-
-        public BehaviourConditionAnd(List<IBehaviourCondition> conditions)
+        /// <summary>
+        /// 渡された条件が全てtrueかどうかを判定するクラス
+        /// </summary>
+        class BehaviourConditionAnd : IBehaviourCondition
         {
-            _conditions = conditions;
-        }
+            private List<IBehaviourCondition> _conditions;
 
-        public bool isSatisfied(GameContext context, IUnit unit)
-        {
-            bool isAllSatisfied = true;
-
-            foreach (var condition in _conditions)
+            public BehaviourConditionAnd(List<IBehaviourCondition> conditions)
             {
-                if (!condition.isSatisfied(context, unit))
+                _conditions = conditions;
+            }
+
+            public bool isSatisfied(GameContext context, IUnit unit)
+            {
+                bool isAllSatisfied = true;
+
+                foreach (var condition in _conditions)
                 {
-                    isAllSatisfied = false;
+                    if (!condition.isSatisfied(context, unit))
+                    {
+                        isAllSatisfied = false;
+                    }
                 }
+                return isAllSatisfied;
             }
-            return isAllSatisfied;
-        }
-    }
-
-
-    /// <summary>
-    /// 渡された条件のどれかがtrueかどうかを判定するクラス
-    /// </summary>
-    public class BehaviourConditionOr : IBehaviourCondition
-    {
-        private List<IBehaviourCondition> _conditions;
-
-        public BehaviourConditionOr(List<IBehaviourCondition> conditions)
-        {
-            _conditions = conditions;
         }
 
-        public bool isSatisfied(GameContext context, IUnit unit)
-        {
-            bool isSatisfied = false;
 
-            if (_conditions.Count == 0)
+        /// <summary>
+        /// 渡された条件のどれかがtrueかどうかを判定するクラス
+        /// </summary>
+        class BehaviourConditionOr : IBehaviourCondition
+        {
+            private List<IBehaviourCondition> _conditions;
+
+            public BehaviourConditionOr(List<IBehaviourCondition> conditions)
             {
-                return true;
+                _conditions = conditions;
             }
 
-            foreach (var condition in _conditions)
+            public bool isSatisfied(GameContext context, IUnit unit)
             {
-                if (condition.isSatisfied(context, unit))
+                bool isSatisfied = false;
+
+                if (_conditions.Count == 0)
                 {
-                    isSatisfied = true;
-                    break;
+                    return true;
                 }
+
+                foreach (var condition in _conditions)
+                {
+                    if (condition.isSatisfied(context, unit))
+                    {
+                        isSatisfied = true;
+                        break;
+                    }
+                }
+                return isSatisfied;
             }
-            return isSatisfied;
-        }
-    }
-
-
-    /// <summary>
-    /// 渡された条件のどれかがtrueかどうかを判定するクラス
-    /// </summary>
-    public class BehaviourConditionNot : IBehaviourCondition
-    {
-        private IBehaviourCondition _condition;
-
-        public BehaviourConditionNot(IBehaviourCondition condition)
-        {
-            _condition = condition;
         }
 
-        public bool isSatisfied(GameContext context, IUnit unit)
+
+        /// <summary>
+        /// 渡された条件のどれかがtrueかどうかを判定するクラス
+        /// </summary>
+        class BehaviourConditionNot : IBehaviourCondition
         {
-            return !_condition.isSatisfied(context, unit);
+            private IBehaviourCondition _condition;
+
+            public BehaviourConditionNot(IBehaviourCondition condition)
+            {
+                _condition = condition;
+            }
+
+            public bool isSatisfied(GameContext context, IUnit unit)
+            {
+                return !_condition.isSatisfied(context, unit);
+            }
         }
     }
 }

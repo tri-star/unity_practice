@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ActionSample.Components;
 using ActionSample.Domain;
 using ActionSample.Domain.BehaviourTree;
-using ActionSample.Infrastructure.RandomGenerator;
 using NUnit.Framework;
 using UnityEngine;
 using Zenject;
@@ -12,14 +11,14 @@ namespace Tests.EditMode.Domain.BehaviourTree
 {
     class BehaviourConditionStub : IBehaviourCondition
     {
-        private bool _isSatisfied;
+        private bool isSatisfied;
         public BehaviourConditionStub(bool isSatisfied)
         {
-            _isSatisfied = isSatisfied;
+            isSatisfied = isSatisfied;
         }
         public bool isSatisfied(GameContext context, IUnit unit)
         {
-            return _isSatisfied;
+            return isSatisfied;
         }
     }
 
