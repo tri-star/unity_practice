@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scripts/Tests/PlayMode/Infrastructure/EntityManager/EntityManagerTest.unity
+    guid: f46d3ec0e9835184baf07bcfddd679b7
   m_configObjects: {}

@@ -61,5 +61,8 @@ namespace ActionSample.Components
         /// <param name="newState">遷移したい状態の値</param>
         /// <returns>状態遷移可能かどうか</returns>
         bool TrySetState(States newState);
+
+        Transform Transform
+        { get; }
     }
 }

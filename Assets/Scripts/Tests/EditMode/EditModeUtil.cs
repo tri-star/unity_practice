@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ActionSample.Domain;
 using ActionSample.Domain.RandomGenerator;
+using ActionSample.Infrastructure.EntityManager;
 using ActionSample.Infrastructure.RandomGenerator;
 
 namespace Tests.EditMode
@@ -9,7 +10,7 @@ namespace Tests.EditMode
     {
         public static GameContext CreateGameContext(Dictionary<string, IRandomGenerator> randomGeneratorMap = null)
         {
-            var context = new GameContext();
+            var context = new GameContext(entityManager: new EntityManagerUnity());
             if (randomGeneratorMap != null)
             {
                 foreach (var entry in randomGeneratorMap)

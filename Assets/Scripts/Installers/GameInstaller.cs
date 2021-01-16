@@ -1,6 +1,7 @@
 
 using ActionSample.Components.Ui;
 using ActionSample.Domain;
+using ActionSample.Infrastructure.EntityManager;
 using ActionSample.Infrastructure.RandomGenerator;
 using ActionSample.Parameters;
 using ActionSample.Signals;
@@ -26,9 +27,10 @@ public class GameInstaller : MonoInstaller<GameInstaller>
 
     private void InstallGameContext()
     {
-        GameContext context = new GameContext();
+        Container.Bind<IEntityManager>().To<EntityManagerUnity>().AsSingle();
+        Container.Bind<GameContext>().ToSelf().AsSingle();
+        var context = Container.Resolve<GameContext>();
         context.RandomGeneratorManager.Add("Game", new RandomGeneratorUnity(100));
-        Container.Bind<GameContext>().FromInstance(context).AsSingle();
     }
 
     private void InstallStageSetting()
