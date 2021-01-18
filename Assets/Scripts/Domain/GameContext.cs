@@ -12,10 +12,13 @@ namespace ActionSample.Domain
 
         public IEntityManager EntityManager { get; private set; }
 
-        public GameContext(IEntityManager entityManager)
+        public ITimeManager TimeManager { get; private set; }
+
+        public GameContext(IEntityManager entityManager, ITimeManager timeManager)
         {
             this.RandomGeneratorManager = new RandomGeneratorManager();
             this.EntityManager = entityManager;
+            this.TimeManager = timeManager;
             this.player = null;
         }
 

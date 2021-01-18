@@ -47,6 +47,12 @@ namespace ActionSample.Domain
         }
 
 
+        public static bool IsIntersect(Bounds self, Bounds other)
+        {
+            Bounds? intersection = GetIntersection(self, other)!;
+            return intersection != null;
+        }
+
         public static Dimension? GetDimension(Bounds self, Bounds other)
         {
             Bounds? intersection = GetIntersection(self, other)!;
@@ -66,9 +72,9 @@ namespace ActionSample.Domain
         /// <returns>衝突の方向</returns>
         public static Dimension? GetDimensionFromIntersection(Bounds self, Bounds intersection)
         {
-            if(intersection.size.z < intersection.size.x && intersection.size.z < intersection.size.y)
+            if (intersection.size.z < intersection.size.x && intersection.size.z < intersection.size.y)
             {
-                if(intersection.min.z >= (self.size.z / 2))
+                if (intersection.min.z >= (self.size.z / 2))
                 {
                     return Dimension.REAR;
                 }

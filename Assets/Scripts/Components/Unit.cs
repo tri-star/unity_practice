@@ -205,6 +205,11 @@ namespace ActionSample.Components
             get { return gameObject.transform; }
         }
 
+        public Bounds Bounds
+        {
+            get { return gameObject.GetComponent<Collider>().bounds; }
+        }
+
         /// <summary>
         /// 指定された状態への遷移が可能かどうかを調べて可能な場合に状態遷移する
         /// </summary>

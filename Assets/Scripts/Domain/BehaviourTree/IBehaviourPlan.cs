@@ -15,7 +15,7 @@ namespace ActionSample.Domain.BehaviourTree
 
         void Init();
 
-        void Execute(IUnit unit);
+        void Execute(GameContext context, IUnit unit);
 
         bool isDone();
     }

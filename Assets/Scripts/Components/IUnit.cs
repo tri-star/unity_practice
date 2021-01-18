@@ -64,5 +64,8 @@ namespace ActionSample.Components
 
         Transform Transform
         { get; }
+
+        Bounds Bounds
+        { get; }
     }
 }
