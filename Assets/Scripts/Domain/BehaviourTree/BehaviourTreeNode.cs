@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 using ActionSample.Components;
-using UnityEngine;
+using System.Linq;
 
 namespace ActionSample.Domain.BehaviourTree
 {
@@ -97,12 +97,13 @@ namespace ActionSample.Domain.BehaviourTree
         /// <param name="unit"></param>
         public BehaviourTreeNode? GetSatisfiedNode(GameContext context, IUnit unit)
         {
-            if (_children.Count == 0)
+            List<BehaviourTreeNode> satisfiedNodes = _children.Where(n => n.isSatisfied(context, unit)).ToList();
+            if (satisfiedNodes.Count == 0)
             {
                 return null;
             }
             int weightTotal = 0;
-            foreach (var child in _children)
+            foreach (var child in satisfiedNodes)
             {
                 weightTotal += child.weight;
             }

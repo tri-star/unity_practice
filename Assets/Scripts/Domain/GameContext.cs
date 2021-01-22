@@ -26,7 +26,7 @@ namespace ActionSample.Domain
         {
             if (player == null)
             {
-                player = EntityManager.FindObjectWithTag("player");
+                player = EntityManager.FindObjectWithTag("Player");
             }
             return player!;
         }

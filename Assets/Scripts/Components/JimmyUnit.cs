@@ -1,5 +1,8 @@
 using System;
 using System.Collections;
+using ActionSample.Domain;
+using ActionSample.Domain.Behaviour;
+using ActionSample.Domain.BehaviourTree;
 using ActionSample.Signals;
 using ActionSample.Utils;
 using UnityEngine;
@@ -7,18 +10,28 @@ using Zenject;
 
 namespace ActionSample.Components
 {
-    public class JimmyUnit : Unit, IDisposable
+    public class JimmyUnit : Unit, IInitializable, IDisposable
     {
         private bool _damageFlowStarted;
 
         private bool _deadFlowStarted;
 
         [Inject]
+        private GameContext gameContext;
+
+        private BehaviourExecutor behaviourExecutor;
+
+        public bool enableAI = true;
+
+        [Inject]
         public new void Initialize()
         {
             base.Initialize();
+            this._animator = this.GetComponent<Animator>();
             _damageFlowStarted = false;
             _deadFlowStarted = false;
+            IBehaviourTreeBuilder builder = new JimmyBehaviour();
+            behaviourExecutor = new BehaviourExecutor(builder.Build());
         }
 
         public void Dispose()
@@ -27,6 +40,12 @@ namespace ActionSample.Components
 
         public void Update()
         {
+            if (enableAI)
+            {
+                var plan = behaviourExecutor.Execute(gameContext, GetComponent<IUnit>());
+                plan?.Execute(gameContext, GetComponent<IUnit>());
+            }
+
             switch (GetState())
             {
                 case Unit.States.WALKING:

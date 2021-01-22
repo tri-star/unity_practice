@@ -17,7 +17,7 @@ namespace ActionSample.Domain.Behaviour.Conditions
         public override bool isSatisfied(GameContext context, IUnit unit)
         {
             var player = context.GetPlayer();
-            return Mathf.Abs(player.transform.position.x - unit.Transform.position.x) < distance;
+            return Mathf.Abs(player.transform.position.x - unit.Transform.position.x) > distance;
         }
     }
 }

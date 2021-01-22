@@ -1,8 +1,10 @@
 
+using ActionSample.Components;
 using ActionSample.Components.Ui;
 using ActionSample.Domain;
 using ActionSample.Infrastructure.EntityManager;
 using ActionSample.Infrastructure.RandomGenerator;
+using ActionSample.Infrastructure.TimeManager;
 using ActionSample.Parameters;
 using ActionSample.Signals;
 using Zenject;
@@ -19,6 +21,7 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         Container.DeclareSignal<UnitKilledSignal>().OptionalSubscriber();
 
         Container.Bind<ActionButton>().AsTransient();
+        Container.Bind<JimmyUnit>().ToSelf().AsTransient();
 
         InstallStageSetting();
         InstallGameContext();
@@ -27,6 +30,7 @@ public class GameInstaller : MonoInstaller<GameInstaller>
 
     private void InstallGameContext()
     {
+        Container.Bind<ITimeManager>().To<TimeManagerUnity>().AsSingle();
         Container.Bind<IEntityManager>().To<EntityManagerUnity>().AsSingle();
         Container.Bind<GameContext>().ToSelf().AsSingle();
         var context = Container.Resolve<GameContext>();

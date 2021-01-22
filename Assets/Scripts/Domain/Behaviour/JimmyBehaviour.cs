@@ -5,7 +5,7 @@ using ActionSample.Domain.BehaviourTree;
 
 namespace ActionSample.Domain.Behaviour
 {
-    public class JImmyBehaviour : IBehaviourTreeBuilder
+    public class JimmyBehaviour : IBehaviourTreeBuilder
     {
         public BehaviourTreeNode Build()
         {
