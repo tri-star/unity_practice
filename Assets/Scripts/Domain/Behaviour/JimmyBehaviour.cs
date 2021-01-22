@@ -19,7 +19,7 @@ namespace ActionSample.Domain.Behaviour
                 new BehaviourTreeNode(
                     name: "プレイヤーが射程内",
                     condition: new ContactWithPlayer(40),
-                    plan: null
+                    plan: new MeleePlan()
                 )
             });
         }

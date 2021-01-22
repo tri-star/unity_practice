@@ -24,6 +24,11 @@ namespace ActionSample.Components
             _unit = GetComponent<IUnit>();
         }
 
+        public void Attack()
+        {
+            _unit.TrySetState(Unit.States.ATTACK);
+        }
+
         public void Damage(WeaponPower weaponPower)
         {
             if (_unit.TrySetState(Unit.States.DAMAGE))

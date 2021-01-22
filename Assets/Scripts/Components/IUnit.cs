@@ -62,6 +62,21 @@ namespace ActionSample.Components
         /// <returns>状態遷移可能かどうか</returns>
         bool TrySetState(States newState);
 
+        /// <summary>
+        /// ユニットが属しているGameObjectの他のコンポーネントを取得して返す
+        /// </summary>
+        /// <param name="component">取得したコンポーネント</param>
+        /// <typeparam name="T">取得したいコンポーネントの型</typeparam>
+        /// <returns>取得できたかどうか</returns>
+        bool TryGetComponent<T>(out T component);
+
+        /// <summary>
+        /// ユニットが属しているGameObjectの他のコンポーネントを取得して返す
+        /// </summary>
+        /// <typeparam name="T">取得したいコンポーネントの型</typeparam>
+        /// <returns>取得したコンポーネント</returns>
+        T GetComponent<T>();
+
         Transform Transform
         { get; }
 
