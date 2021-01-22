@@ -8,7 +8,7 @@ namespace ActionSample.Domain.BehaviourTree
     {
         private BehaviourTreeNode _tree;
 
-        BehaviourExecutor(BehaviourTreeNode tree)
+        public BehaviourExecutor(BehaviourTreeNode tree)
         {
             _tree = tree;
         }

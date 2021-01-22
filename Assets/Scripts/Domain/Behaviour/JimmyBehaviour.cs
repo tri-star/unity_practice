@@ -7,7 +7,7 @@ namespace ActionSample.Domain.Behaviour
 {
     public class JImmyBehaviour : IBehaviourTreeBuilder
     {
-        public BehaviourTreeNode build()
+        public BehaviourTreeNode Build()
         {
             return new RootBehaviourTreeNode(new List<BehaviourTreeNode>()
             {
