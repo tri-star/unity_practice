@@ -4,15 +4,15 @@
 	{
 		_MainTex("Texture", 2D) = "white" {}
 	}
-		SubShader
+	SubShader
 	{
 		Tags {
-            "Queue"="Transparent"
-            "RenderType"="Transparent"
-            "DisableBatching" = "True"
-        }
+			"Queue" = "Transparent"
+			"RenderType" = "Transparent"
+			"DisableBatching" = "True"
+		}
 
-        Cull Off
+		Cull Off
 		Blend SrcAlpha OneMinusSrcAlpha
 		Pass
 		{
