@@ -6,12 +6,16 @@
 	}
 		SubShader
 	{
-		Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
+		Tags {
+            "Queue"="Transparent"
+            "RenderType"="Transparent"
+            "DisableBatching" = "True"
+        }
 
+        Cull Off
 		Blend SrcAlpha OneMinusSrcAlpha
 		Pass
 		{
-            Cull Off
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
