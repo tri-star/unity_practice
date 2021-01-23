@@ -32,6 +32,11 @@ namespace ActionSample.Components
             _deadFlowStarted = false;
             IBehaviourTreeBuilder builder = new JimmyBehaviour();
             behaviourExecutor = new BehaviourExecutor(builder.Build());
+
+            this.GetComponent<CombatUnit>().weaponPower = new WeaponPower(
+                100,
+                new Vector3(2, 10, 0)
+            );
         }
 
         public void Dispose()
@@ -40,24 +45,34 @@ namespace ActionSample.Components
 
         public void Update()
         {
-            if (enableAI)
-            {
-                var plan = behaviourExecutor.Execute(gameContext, GetComponent<IUnit>());
-                plan?.Execute(gameContext, GetComponent<IUnit>());
-            }
-
             switch (GetState())
             {
                 case Unit.States.WALKING:
+                    if (enableAI)
+                    {
+                        var plan = behaviourExecutor.Execute(gameContext, GetComponent<IUnit>());
+                        plan?.Execute(gameContext, GetComponent<IUnit>());
+                    }
                     if (Mathf.Abs(velocity.x) == 0 && Mathf.Abs(velocity.z) == 0)
                     {
                         TrySetState(Unit.States.NEUTRAL);
                     }
                     break;
                 case Unit.States.NEUTRAL:
+                    if (enableAI)
+                    {
+                        var plan = behaviourExecutor.Execute(gameContext, GetComponent<IUnit>());
+                        plan?.Execute(gameContext, GetComponent<IUnit>());
+                    }
                     if (Mathf.Abs(velocity.x) > 0 || Mathf.Abs(velocity.z) > 0)
                     {
                         TrySetState(Unit.States.WALKING);
+                    }
+                    break;
+                case Unit.States.ATTACK:
+                    if (AnimationUtil.IsAnimationDone(_animator, "Enemy02Attack"))
+                    {
+                        TrySetState(Unit.States.NEUTRAL);
                     }
                     break;
                 case Unit.States.DAMAGE:

@@ -117,7 +117,7 @@ namespace ActionSample.Domain.BehaviourTree
             {
                 if (randomValue >= currentWeight && randomValue < (currentWeight + child.weight))
                 {
-                    selectedNode = child;
+                    return child;
                 }
                 currentWeight += child.weight;
             }

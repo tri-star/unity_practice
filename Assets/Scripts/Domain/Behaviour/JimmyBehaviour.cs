@@ -14,11 +14,22 @@ namespace ActionSample.Domain.Behaviour
                 new BehaviourTreeNode(
                     name: "プレイヤーが遠い",
                     condition: new PlayerXIsGreaterThanEq(40),
-                    plan: new TargettingPlan(1.5f)
+                    children: new List<BehaviourTreeNode>() {
+                        new BehaviourTreeNode(
+                            name: "プレイヤーに近づく",
+                            weight: 30,
+                            plan: new TargettingPlan(1.0f)
+                        ),
+                        new BehaviourTreeNode(
+                            name: "何もしない",
+                            weight: 10,
+                            plan: new NoOpPlan(0.8f)
+                        ),
+                    }
                 ),
                 new BehaviourTreeNode(
                     name: "プレイヤーが射程内",
-                    condition: new ContactWithPlayer(40),
+                    condition: new ContactWithPlayer(50),
                     plan: new MeleePlan()
                 )
             });

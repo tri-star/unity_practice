@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using ActionSample.Domain;
 using ActionSample.Parameters;
 using ActionSample.Signals;
@@ -12,10 +13,13 @@ namespace ActionSample.Components
     {
         private Health _health;
 
+        private bool _damageFlowStarted;
+
         [Inject]
         public new void Initialize()
         {
             base.Initialize();
+            _damageFlowStarted = false;
             _signalBus.Subscribe<PlayerAttackSignal>(OnAttackEvent);
             _health = GetComponent<Health>();
         }
@@ -65,6 +69,14 @@ namespace ActionSample.Components
                         TrySetState(Unit.States.NEUTRAL);
                     }
                     break;
+                case Unit.States.DAMAGE:
+                    if (!_damageFlowStarted)
+                    {
+                        _damageFlowStarted = true;
+                        StartCoroutine(DamageStateFlow());
+                    }
+                    break;
+
             }
 
             if (dimension == Unit.Dimension.LEFT)
@@ -80,21 +92,31 @@ namespace ActionSample.Components
 
         protected new void UpdateAnimator()
         {
+            _animator.SetBool("isAttacking", false);
+            _animator.SetBool("isWalking", false);
+            _animator.SetBool("isDamaged", false);
             switch (GetState())
             {
                 case Unit.States.WALKING:
-                    _animator.SetBool("isAttacking", false);
                     _animator.SetBool("isWalking", true);
                     break;
                 case Unit.States.ATTACK:
                     _animator.SetBool("isAttacking", true);
-                    _animator.SetBool("isWalking", false);
                     break;
-                default:
-                    _animator.SetBool("isAttacking", false);
-                    _animator.SetBool("isWalking", false);
+                case Unit.States.DAMAGE:
+                case Unit.States.DEAD:
+                    _animator.SetBool("isDamaged", true);
                     break;
             }
         }
+
+        private IEnumerator DamageStateFlow()
+        {
+            // @TODO: ダメージ時間もパラメータ化する
+            yield return new WaitForSeconds(0.5f);
+            TrySetState(Unit.States.NEUTRAL);
+            _damageFlowStarted = false;
+        }
+
     }
 }

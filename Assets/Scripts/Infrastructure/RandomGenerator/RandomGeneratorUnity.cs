@@ -25,8 +25,10 @@ namespace ActionSample.Infrastructure.RandomGenerator
 
         public float FromRange(float min, float max)
         {
-            Random.state = this.state;
-            return Random.Range(min, max);
+            Random.state = state;
+            var value = Random.Range(min, max);
+            state = Random.state;
+            return value;
         }
 
     }
