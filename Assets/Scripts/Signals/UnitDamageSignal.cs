@@ -1,5 +1,5 @@
 
-using ActionSample.Components;
+using ActionSample.Components.Unit;
 using UnityEngine;
 
 public class UnitDamageSignal

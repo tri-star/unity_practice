@@ -1,6 +1,6 @@
 
 
-using ActionSample.Components;
+using ActionSample.Components.Unit;
 
 namespace ActionSample.Domain.BehaviourTree
 {

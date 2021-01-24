@@ -1,4 +1,4 @@
-using ActionSample.Components;
+using ActionSample.Components.Unit;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 

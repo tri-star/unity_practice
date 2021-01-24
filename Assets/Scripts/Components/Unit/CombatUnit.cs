@@ -3,7 +3,7 @@ using UnityEngine;
 using Zenject;
 using Collision = UnityEngine.Collision;
 
-namespace ActionSample.Components
+namespace ActionSample.Components.Unit
 {
 
     public class CombatUnit : MonoBehaviour, IComponent

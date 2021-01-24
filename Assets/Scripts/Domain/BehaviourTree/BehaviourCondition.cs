@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ActionSample.Components;
+using ActionSample.Components.Unit;
 
 namespace ActionSample.Domain.BehaviourTree
 {
@@ -11,7 +11,7 @@ namespace ActionSample.Domain.BehaviourTree
     public abstract class BehaviourCondition : IBehaviourCondition
     {
         /// <see cref="IBehaviourCondition"/>
-        public abstract bool isSatisfied(GameContext context, Components.IUnit unit);
+        public abstract bool isSatisfied(GameContext context, Components.Unit.IUnit unit);
 
         /// <summary>
         /// 渡された条件全てをANDで判定するConditionを返すファクトリメソッド

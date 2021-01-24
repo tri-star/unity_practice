@@ -7,7 +7,7 @@ using Zenject;
 using ActionSampleCollision = ActionSample.Domain.Collision;
 using Collision = UnityEngine.Collision;
 
-namespace ActionSample.Components
+namespace ActionSample.Components.Unit
 {
     /// <summary>
     /// ゲーム中で画面に表示されるオブジェクトが持つコンポーネント

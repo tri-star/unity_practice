@@ -1,5 +1,5 @@
 #nullable enable
-using ActionSample.Components;
+using ActionSample.Components.Unit;
 using ActionSample.Domain.BehaviourTree;
 using UnityEngine;
 

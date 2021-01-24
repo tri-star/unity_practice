@@ -1,7 +1,7 @@
 using UnityEngine;
 using ActionSample.Parameters.Unit;
 
-namespace ActionSample.Components
+namespace ActionSample.Components.Unit
 {
     public class Health : MonoBehaviour, IComponent
     {

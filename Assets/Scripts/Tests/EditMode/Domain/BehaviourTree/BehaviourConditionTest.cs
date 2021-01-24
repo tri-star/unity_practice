@@ -1,6 +1,6 @@
 
 using System.Collections.Generic;
-using ActionSample.Components;
+using ActionSample.Components.Unit;
 using ActionSample.Domain;
 using ActionSample.Domain.BehaviourTree;
 using NUnit.Framework;

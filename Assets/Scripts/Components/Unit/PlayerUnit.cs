@@ -7,7 +7,7 @@ using ActionSample.Utils;
 using UnityEngine;
 using Zenject;
 
-namespace ActionSample.Components
+namespace ActionSample.Components.Unit
 {
     public class PlayerUnit : Unit, IDisposable
     {

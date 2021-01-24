@@ -1,7 +1,7 @@
 #nullable enable
 
 using System.Collections.Generic;
-using ActionSample.Components;
+using ActionSample.Components.Unit;
 using System.Linq;
 
 namespace ActionSample.Domain.BehaviourTree

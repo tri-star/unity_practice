@@ -1,7 +1,7 @@
 using UnityEngine;
-using static ActionSample.Components.Unit;
+using static ActionSample.Components.Unit.Unit;
 
-namespace ActionSample.Components
+namespace ActionSample.Components.Unit
 {
     public interface IUnit : IComponent
     {
