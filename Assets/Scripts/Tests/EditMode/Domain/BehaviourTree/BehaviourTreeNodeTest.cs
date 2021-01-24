@@ -69,7 +69,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
             randomGenerator!.AddValue(randomValue);
 
             var selected = node.GetSatisfiedNode(gameContext!, gameObject!.GetComponent<PlayerUnit>());
-            Assert.That(selected?.name, Is.EqualTo(expectedName));
+            Assert.That(selected?.Name, Is.EqualTo(expectedName));
         }
 
 

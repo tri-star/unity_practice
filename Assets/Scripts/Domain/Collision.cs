@@ -5,7 +5,7 @@ namespace ActionSample.Domain
     public class Collision
     {
 
-        public enum Dimension
+        public enum DIMENSION
         {
             LEFT,
             RIGHT,
@@ -53,7 +53,7 @@ namespace ActionSample.Domain
             return intersection != null;
         }
 
-        public static Dimension? GetDimension(Bounds self, Bounds other)
+        public static DIMENSION? GetDimension(Bounds self, Bounds other)
         {
             Bounds? intersection = GetIntersection(self, other)!;
             if (!intersection.HasValue)
@@ -70,39 +70,39 @@ namespace ActionSample.Domain
         /// <param name="self">自分の領域サイズ</param>
         /// <param name="intersection">相手との衝突範囲の交差部分</param>
         /// <returns>衝突の方向</returns>
-        public static Dimension? GetDimensionFromIntersection(Bounds self, Bounds intersection)
+        public static DIMENSION? GetDimensionFromIntersection(Bounds self, Bounds intersection)
         {
             if (intersection.size.z < intersection.size.x && intersection.size.z < intersection.size.y)
             {
                 if (intersection.min.z >= (self.size.z / 2))
                 {
-                    return Dimension.REAR;
+                    return DIMENSION.REAR;
                 }
                 else
                 {
-                    return Dimension.FRONT;
+                    return DIMENSION.FRONT;
                 }
             }
             if (intersection.size.x < intersection.size.z && intersection.size.x < intersection.size.y)
             {
                 if (intersection.min.x >= (self.size.x / 2))
                 {
-                    return Dimension.RIGHT;
+                    return DIMENSION.RIGHT;
                 }
                 else
                 {
-                    return Dimension.LEFT;
+                    return DIMENSION.LEFT;
                 }
             }
             if (intersection.size.y < intersection.size.z && intersection.size.y < intersection.size.x)
             {
                 if (intersection.min.y >= (self.size.y / 2))
                 {
-                    return Dimension.TOP;
+                    return DIMENSION.TOP;
                 }
                 else
                 {
-                    return Dimension.BOTTOM;
+                    return DIMENSION.BOTTOM;
                 }
             }
             return null;

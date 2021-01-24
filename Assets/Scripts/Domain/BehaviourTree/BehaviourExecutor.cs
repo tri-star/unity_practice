@@ -6,24 +6,24 @@ namespace ActionSample.Domain.BehaviourTree
 {
     public class BehaviourExecutor
     {
-        private BehaviourTreeNode _tree;
+        private BehaviourTreeNode tree;
 
         private IBehaviourPlan? currentPlan;
 
         public BehaviourExecutor(BehaviourTreeNode tree)
         {
-            _tree = tree;
+            this.tree = tree;
             currentPlan = null;
         }
 
         public IBehaviourPlan? Execute(GameContext context, IUnit unit)
         {
-            if (!currentPlan?.isDone() ?? false)
+            if (!currentPlan?.IsDone() ?? false)
             {
                 return currentPlan;
             }
 
-            BehaviourTreeNode? cursor = _tree;
+            BehaviourTreeNode? cursor = tree;
 
             int limitter = 100;
 
@@ -31,7 +31,7 @@ namespace ActionSample.Domain.BehaviourTree
             {
                 if (cursor.HavePlan())
                 {
-                    currentPlan = cursor.plan;
+                    currentPlan = cursor.Plan;
                     currentPlan!.Init();
                     return currentPlan;
                 }

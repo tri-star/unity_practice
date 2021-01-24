@@ -16,7 +16,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
         {
             isSatisfiedFlag = isSatisfied;
         }
-        public bool isSatisfied(GameContext context, IUnit unit)
+        public bool IsSatisfied(GameContext context, IUnit unit)
         {
             return isSatisfiedFlag;
         }
@@ -53,7 +53,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
             var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.And(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.IsSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
             var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.And(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(false));
+            Assert.That<bool>(behaviourCondition.IsSatisfied(gameContext, dummyUnit), Is.EqualTo(false));
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
             var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.And(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.IsSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
     }
 
@@ -99,7 +99,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
             var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Or(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.IsSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
             var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Or(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.IsSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
             var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Or(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(false));
+            Assert.That<bool>(behaviourCondition.IsSatisfied(gameContext, dummyUnit), Is.EqualTo(false));
         }
 
         [Test]
@@ -141,7 +141,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
             var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Or(conditions);
-            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.IsSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
     }
 
@@ -155,7 +155,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
             var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Not(inputCondition);
-            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(false));
+            Assert.That<bool>(behaviourCondition.IsSatisfied(gameContext, dummyUnit), Is.EqualTo(false));
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
             var dummyUnit = gameObject.GetComponent<IUnit>();
             var behaviourCondition = BehaviourCondition.Not(inputCondition);
-            Assert.That<bool>(behaviourCondition.isSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
+            Assert.That<bool>(behaviourCondition.IsSatisfied(gameContext, dummyUnit), Is.EqualTo(true));
         }
     }
 

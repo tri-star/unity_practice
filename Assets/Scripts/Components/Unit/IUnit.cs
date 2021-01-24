@@ -26,18 +26,18 @@ namespace ActionSample.Components.Unit
         /// <summary>
         /// 現在の状態を返す
         /// </summary>
-        States GetState();
+        STATES GetState();
 
         /// <summary>
         /// 現在の状態を強制的にセットする
         /// </summary>
         /// <param name="newState"></param>
-        void SetState(States newState);
+        void SetState(STATES newState);
 
         /// <summary>
         /// 向いている方向
         /// </summary>
-        Dimension dimension
+        DIMENSION Dimension
         {
             get; set;
         }
@@ -45,7 +45,7 @@ namespace ActionSample.Components.Unit
         /// <summary>
         /// 現在の加速度
         /// </summary>
-        Vector3 velocity
+        Vector3 Velocity
         {
             get; set;
         }
@@ -60,7 +60,7 @@ namespace ActionSample.Components.Unit
         /// </summary>
         /// <param name="newState">遷移したい状態の値</param>
         /// <returns>状態遷移可能かどうか</returns>
-        bool TrySetState(States newState);
+        bool TrySetState(STATES newState);
 
         /// <summary>
         /// ユニットが属しているGameObjectの他のコンポーネントを取得して返す

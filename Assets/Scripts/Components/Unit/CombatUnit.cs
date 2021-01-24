@@ -8,7 +8,7 @@ namespace ActionSample.Components.Unit
 
     public class CombatUnit : MonoBehaviour, IComponent
     {
-        private IUnit _unit;
+        private IUnit unit;
 
         /// <summary>
         /// 攻撃によるダメージの情報
@@ -21,19 +21,19 @@ namespace ActionSample.Components.Unit
         [Inject]
         public void Initialize()
         {
-            _unit = GetComponent<IUnit>();
+            unit = GetComponent<IUnit>();
         }
 
         public void Attack()
         {
-            _unit.TrySetState(Unit.States.ATTACK);
+            unit.TrySetState(Unit.STATES.ATTACK);
         }
 
         public void Damage(WeaponPower weaponPower)
         {
-            if (_unit.TrySetState(Unit.States.DAMAGE))
+            if (unit.TrySetState(Unit.STATES.DAMAGE))
             {
-                _unit.AddForce(weaponPower.force);
+                unit.AddForce(weaponPower.Force);
             }
         }
 
@@ -45,12 +45,12 @@ namespace ActionSample.Components.Unit
                 WeaponPower weaponPower = collision.collider.gameObject.GetComponentInParent<CombatUnit>().weaponPower;
                 Health health = GetComponent<Health>();
 
-                if (_unit.TrySetState(Unit.States.DAMAGE))
+                if (unit.TrySetState(Unit.STATES.DAMAGE))
                 {
-                    _unit.AddForce(weaponPower.force);
+                    unit.AddForce(weaponPower.Force);
 
                     // @TODO: ダメージ計算用のサービスを用意してダメージ計算を行う
-                    health.TakeDamage(weaponPower.power);
+                    health.TakeDamage(weaponPower.Power);
                 }
             }
         }

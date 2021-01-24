@@ -11,7 +11,7 @@ namespace ActionSample.Domain.BehaviourTree
     public abstract class BehaviourCondition : IBehaviourCondition
     {
         /// <see cref="IBehaviourCondition"/>
-        public abstract bool isSatisfied(GameContext context, Components.Unit.IUnit unit);
+        public abstract bool IsSatisfied(GameContext context, Components.Unit.IUnit unit);
 
         /// <summary>
         /// 渡された条件全てをANDで判定するConditionを返すファクトリメソッド
@@ -46,20 +46,20 @@ namespace ActionSample.Domain.BehaviourTree
         /// </summary>
         class BehaviourConditionAnd : IBehaviourCondition
         {
-            private List<IBehaviourCondition> _conditions;
+            private List<IBehaviourCondition> conditions;
 
             public BehaviourConditionAnd(List<IBehaviourCondition> conditions)
             {
-                _conditions = conditions;
+                this.conditions = conditions;
             }
 
-            public bool isSatisfied(GameContext context, IUnit unit)
+            public bool IsSatisfied(GameContext context, IUnit unit)
             {
                 bool isAllSatisfied = true;
 
-                foreach (var condition in _conditions)
+                foreach (var condition in conditions)
                 {
-                    if (!condition.isSatisfied(context, unit))
+                    if (!condition.IsSatisfied(context, unit))
                     {
                         isAllSatisfied = false;
                     }
@@ -74,25 +74,25 @@ namespace ActionSample.Domain.BehaviourTree
         /// </summary>
         class BehaviourConditionOr : IBehaviourCondition
         {
-            private List<IBehaviourCondition> _conditions;
+            private List<IBehaviourCondition> conditions;
 
             public BehaviourConditionOr(List<IBehaviourCondition> conditions)
             {
-                _conditions = conditions;
+                this.conditions = conditions;
             }
 
-            public bool isSatisfied(GameContext context, IUnit unit)
+            public bool IsSatisfied(GameContext context, IUnit unit)
             {
                 bool isSatisfied = false;
 
-                if (_conditions.Count == 0)
+                if (conditions.Count == 0)
                 {
                     return true;
                 }
 
-                foreach (var condition in _conditions)
+                foreach (var condition in conditions)
                 {
-                    if (condition.isSatisfied(context, unit))
+                    if (condition.IsSatisfied(context, unit))
                     {
                         isSatisfied = true;
                         break;
@@ -108,16 +108,16 @@ namespace ActionSample.Domain.BehaviourTree
         /// </summary>
         class BehaviourConditionNot : IBehaviourCondition
         {
-            private IBehaviourCondition _condition;
+            private IBehaviourCondition condition;
 
             public BehaviourConditionNot(IBehaviourCondition condition)
             {
-                _condition = condition;
+                this.condition = condition;
             }
 
-            public bool isSatisfied(GameContext context, IUnit unit)
+            public bool IsSatisfied(GameContext context, IUnit unit)
             {
-                return !_condition.isSatisfied(context, unit);
+                return !condition.IsSatisfied(context, unit);
             }
         }
     }

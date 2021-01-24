@@ -6,36 +6,31 @@ namespace ActionSample.Components.Unit
     public class Health : MonoBehaviour, IComponent
     {
         [SerializeField]
-        private HealthSetting _initialHealth;
+        private HealthSetting initialHealth;
 
-        private float _currentHp;
-
-        private float _maxHp;
-        private float _power;
-
-        private IUnit _unit;
+        private IUnit unit;
 
         public void Start()
         {
-            _currentHp = _initialHealth.hp;
-            _maxHp = _initialHealth.hp;
-            _power = _initialHealth.power;
-            _unit = GetComponent<IUnit>();
+            CurrentHp = initialHealth.hp;
+            MaxHp = initialHealth.hp;
+            Power = initialHealth.power;
+            unit = GetComponent<IUnit>();
         }
 
-        public float currentHp { get { return _currentHp; } }
+        public float CurrentHp { get; private set; }
 
-        public float maxHp { get { return _maxHp; } }
+        public float MaxHp { get; private set; }
 
-        public float power { get { return _power; } }
+        public float Power { get; private set; }
 
         public void TakeDamage(float damage)
         {
-            _currentHp -= Mathf.Max(damage, 0);
+            CurrentHp -= Mathf.Max(damage, 0);
 
-            if (_currentHp <= 0)
+            if (CurrentHp <= 0)
             {
-                _unit.SetState(Unit.States.DEAD);
+                unit.SetState(Unit.STATES.DEAD);
             }
         }
     }

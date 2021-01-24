@@ -6,7 +6,7 @@ namespace ActionSample.Domain.Behaviour.Plans
 {
     public class MeleePlan : IBehaviourPlan
     {
-        public string name => "近接攻撃";
+        public string Name => "近接攻撃";
 
         private enum STATES
         {
@@ -32,7 +32,7 @@ namespace ActionSample.Domain.Behaviour.Plans
                     state = STATES.ATTACKING;
                     break;
                 case STATES.ATTACKING:
-                    if (unit.GetState() != Unit.States.ATTACK)
+                    if (unit.GetState() != Unit.STATES.ATTACK)
                     {
                         state = STATES.DONE;
                     }
@@ -40,7 +40,7 @@ namespace ActionSample.Domain.Behaviour.Plans
             }
         }
 
-        public bool isDone()
+        public bool IsDone()
         {
             return state == STATES.DONE;
         }

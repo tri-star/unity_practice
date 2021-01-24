@@ -17,7 +17,7 @@ namespace ActionSample.Components.Unit
     {
 
         //@TODO: Domain層で実装することを検討
-        public enum States
+        public enum STATES
         {
             NEUTRAL,
             WALKING,
@@ -26,49 +26,46 @@ namespace ActionSample.Components.Unit
             DEAD,
         }
 
-        public enum Dimension
+        public enum DIMENSION
         {
             LEFT,
             RIGHT
         }
 
         [Inject]
-        protected SignalBus _signalBus;
+        protected SignalBus signalBus;
 
         [SerializeField]
         protected bool affectGravity = true;
 
-        protected Vector3 _velocity;
+        protected Vector3 velocity;
 
-        protected Animator _animator;
+        protected Animator animator;
 
         [Inject]
-        protected StageSetting _stageSetting;
+        protected StageSetting stageSetting;
 
-        protected Collider _collider;
+        protected Collider groundCollider;
 
-        protected Collider _groundCollider;
-
-        protected States _state;
+        protected STATES state;
 
         [SerializeField]
-        protected Dimension _dimension;
+        protected DIMENSION _dimension;
 
         [SerializeField]
         protected float speed;
 
         public void Initialize()
         {
-            this._animator = this.GetComponent<Animator>();
-            this._collider = this.GetComponent<Collider>();
-            this._velocity = new Vector3(0, 0, 0);
-            this._groundCollider = null;
-            _state = States.NEUTRAL;
+            this.animator = this.GetComponent<Animator>();
+            this.velocity = new Vector3(0, 0, 0);
+            this.groundCollider = null;
+            state = STATES.NEUTRAL;
         }
 
         public void FixedUpdate()
         {
-            float forceY = _velocity.y;
+            float forceY = velocity.y;
 
             // @TODO: Gravityコンポーネントに切り出すことを検討
             if (affectGravity)
@@ -76,8 +73,8 @@ namespace ActionSample.Components.Unit
                 if (!this.IsGrounded())
                 {
                     forceY = Mathf.Clamp(
-                        this._velocity.y + this._stageSetting.gravitySpeed,
-                        this._stageSetting.maxGravitySpeed,
+                        this.velocity.y + this.stageSetting.gravitySpeed,
+                        this.stageSetting.maxGravitySpeed,
                         999
                     );
                 }
@@ -87,9 +84,9 @@ namespace ActionSample.Components.Unit
                 }
 
             }
-            this._velocity = new Vector3(this._velocity.x, forceY, this._velocity.z);
+            this.velocity = new Vector3(this.velocity.x, forceY, this.velocity.z);
 
-            this.transform.Translate(this._velocity);
+            this.transform.Translate(this.velocity);
         }
 
 
@@ -117,9 +114,9 @@ namespace ActionSample.Components.Unit
 
         public void OnCollisionExit(Collision collision)
         {
-            if (collision.collider == this._groundCollider)
+            if (collision.collider == this.groundCollider)
             {
-                this._groundCollider = null;
+                this.groundCollider = null;
             }
         }
 
@@ -129,59 +126,59 @@ namespace ActionSample.Components.Unit
         {
             float newX = x * this.speed;
             float newZ = z * this.speed;
-            this._velocity = new Vector3(newX, this._velocity.y, newZ);
+            this.velocity = new Vector3(newX, this.velocity.y, newZ);
 
             if (newX < 0)
             {
-                _dimension = Dimension.LEFT;
+                _dimension = DIMENSION.LEFT;
             }
             else if (newX > 0)
             {
-                _dimension = Dimension.RIGHT;
+                _dimension = DIMENSION.RIGHT;
             }
         }
 
         public void AddForce(Vector3 force)
         {
-            _velocity += force;
+            velocity += force;
 
-            if (_velocity.y > 1)
+            if (velocity.y > 1)
             {
-                _groundCollider = null;
+                groundCollider = null;
             }
         }
 
 
         public void StopForce()
         {
-            _velocity = new Vector3(0, 0, 0);
+            velocity = new Vector3(0, 0, 0);
         }
 
-        public States GetState()
+        public STATES GetState()
         {
-            return _state;
+            return state;
         }
 
-        public void SetState(States newState)
+        public void SetState(STATES newState)
         {
-            States oldState = _state;
-            _state = newState;
+            STATES oldState = state;
+            state = newState;
 
-            _signalBus.Fire<UnitStateChangeSignal>(new UnitStateChangeSignal { oldState = oldState, newState = newState });
+            signalBus.Fire<UnitStateChangeSignal>(new UnitStateChangeSignal { oldState = oldState, newState = newState });
             OnChangeState(newState);
         }
 
 
-        public Dimension dimension
+        public DIMENSION Dimension
         {
             get { return _dimension; }
             set { _dimension = value; }
         }
 
-        public Vector3 velocity
+        public Vector3 Velocity
         {
-            get { return _velocity; }
-            set { _velocity = value; }
+            get { return velocity; }
+            set { velocity = value; }
         }
 
         public bool AffectGravity
@@ -196,7 +193,7 @@ namespace ActionSample.Components.Unit
         /// <returns></returns>
         public bool IsGrounded()
         {
-            return this._groundCollider == null ? false : true;
+            return this.groundCollider == null ? false : true;
         }
 
 
@@ -215,7 +212,7 @@ namespace ActionSample.Components.Unit
         /// </summary>
         /// <param name="newState">遷移したい状態の値</param>
         /// <returns>状態遷移が出来たかどうか</returns>
-        public bool TrySetState(Unit.States newState)
+        public bool TrySetState(Unit.STATES newState)
         {
             if (CanTransitionState(newState))
             {
@@ -230,28 +227,28 @@ namespace ActionSample.Components.Unit
         /// </summary>
         /// <param name="newState">遷移したい状態の値</param>
         /// <returns>状態遷移可能かどうか</returns>
-        protected bool CanTransitionState(Unit.States newState)
+        protected bool CanTransitionState(Unit.STATES newState)
         {
             // @TODO: ドメインに関する実装として切り出す
             switch (GetState())
             {
-                case Unit.States.NEUTRAL:
+                case Unit.STATES.NEUTRAL:
                     return true;
-                case Unit.States.WALKING:
+                case Unit.STATES.WALKING:
                     return true;
-                case Unit.States.ATTACK:
-                    if (newState == Unit.States.WALKING)
+                case Unit.STATES.ATTACK:
+                    if (newState == Unit.STATES.WALKING)
                     {
                         return false;
                     }
                     return true;
-                case Unit.States.DAMAGE:
-                    if (newState != Unit.States.NEUTRAL)
+                case Unit.STATES.DAMAGE:
+                    if (newState != Unit.STATES.NEUTRAL)
                     {
                         return false;
                     }
                     return true;
-                case Unit.States.DEAD:
+                case Unit.STATES.DEAD:
                     return false;
             }
             throw new NotSupportedException($"無効な状態が指定されました: {GetState()}");
@@ -261,7 +258,7 @@ namespace ActionSample.Components.Unit
         /// 状態が変更された時に呼び出される処理
         /// </summary>
         /// <param name="newState">新しい状態</param>
-        protected void OnChangeState(States newState)
+        protected void OnChangeState(STATES newState)
         {
         }
 
@@ -277,7 +274,7 @@ namespace ActionSample.Components.Unit
         private void checkGrounded(Collision collision)
         {
             Bounds? intersection = ActionSampleCollision.GetIntersection(
-                this._collider.bounds,
+                GetComponent<Collider>().bounds,
                 collision.collider.bounds
             );
 
@@ -286,15 +283,15 @@ namespace ActionSample.Components.Unit
                 return;
             }
 
-            ActionSampleCollision.Dimension? dimension = ActionSampleCollision.GetDimensionFromIntersection(
-                this._collider.bounds,
+            ActionSampleCollision.DIMENSION? dimension = ActionSampleCollision.GetDimensionFromIntersection(
+                GetComponent<Collider>().bounds,
                 intersection ?? new Bounds()
             );
-            if (dimension != ActionSampleCollision.Dimension.BOTTOM)
+            if (dimension != ActionSampleCollision.DIMENSION.BOTTOM)
             {
                 return;
             }
-            this._groundCollider = collision.collider;
+            this.groundCollider = collision.collider;
             this.transform.Translate(new Vector3(0, intersection?.size.y ?? 0, 0));
         }
 
@@ -303,7 +300,7 @@ namespace ActionSample.Components.Unit
         private void resolveCollision(Collision collision)
         {
             Bounds? intersection = ActionSampleCollision.GetIntersection(
-                this._collider.bounds,
+                GetComponent<Collider>().bounds,
                 collision.collider.bounds
             );
 
@@ -312,26 +309,26 @@ namespace ActionSample.Components.Unit
                 return;
             }
 
-            ActionSampleCollision.Dimension? dimension = ActionSampleCollision.GetDimensionFromIntersection(
-                this._collider.bounds,
+            ActionSampleCollision.DIMENSION? dimension = ActionSampleCollision.GetDimensionFromIntersection(
+                GetComponent<Collider>().bounds,
                 intersection ?? new Bounds()
             );
 
             float adjustX = 0;
             float adjustZ = 0;
-            if (dimension == ActionSampleCollision.Dimension.LEFT)
+            if (dimension == ActionSampleCollision.DIMENSION.LEFT)
             {
                 adjustX = intersection?.size.x ?? 0;
             }
-            if (dimension == ActionSampleCollision.Dimension.RIGHT)
+            if (dimension == ActionSampleCollision.DIMENSION.RIGHT)
             {
                 adjustX = -intersection?.size.x ?? 0;
             }
-            if (dimension == ActionSampleCollision.Dimension.FRONT)
+            if (dimension == ActionSampleCollision.DIMENSION.FRONT)
             {
                 adjustZ = intersection?.size.z ?? 0;
             }
-            if (dimension == ActionSampleCollision.Dimension.REAR)
+            if (dimension == ActionSampleCollision.DIMENSION.REAR)
             {
                 adjustZ = -intersection?.size.z ?? 0;
             }

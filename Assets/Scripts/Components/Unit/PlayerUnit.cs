@@ -11,37 +11,37 @@ namespace ActionSample.Components.Unit
 {
     public class PlayerUnit : Unit, IDisposable
     {
-        private Health _health;
+        private Health health;
 
-        private bool _damageFlowStarted;
+        private bool damageFlowStarted;
 
         [Inject]
         public new void Initialize()
         {
             base.Initialize();
-            _damageFlowStarted = false;
-            _signalBus.Subscribe<PlayerAttackSignal>(OnAttackEvent);
-            _health = GetComponent<Health>();
+            damageFlowStarted = false;
+            signalBus.Subscribe<PlayerAttackSignal>(OnAttackEvent);
+            health = GetComponent<Health>();
         }
 
         public void Dispose()
         {
-            _signalBus.Unsubscribe<PlayerAttackSignal>(OnAttackEvent);
+            signalBus.Unsubscribe<PlayerAttackSignal>(OnAttackEvent);
         }
 
         public void OnAttackEvent(PlayerAttackSignal signal)
         {
-            Vector3 force = _stageSetting.defaultDamageForce;
-            if (dimension == Unit.Dimension.LEFT)
+            Vector3 force = stageSetting.defaultDamageForce;
+            if (Dimension == Unit.DIMENSION.LEFT)
             {
                 force = new Vector3(force.x * -1, force.y, force.z);
             }
 
             this.GetComponent<CombatUnit>().weaponPower = new WeaponPower(
-                _health.power,
+                health.Power,
                 force
             );
-            TrySetState(Unit.States.ATTACK);
+            TrySetState(Unit.STATES.ATTACK);
         }
 
 
@@ -51,35 +51,35 @@ namespace ActionSample.Components.Unit
 
             switch (GetState())
             {
-                case Unit.States.WALKING:
-                    if (Mathf.Abs(velocity.x) == 0 && Mathf.Abs(velocity.z) == 0)
+                case Unit.STATES.WALKING:
+                    if (Mathf.Abs(Velocity.x) == 0 && Mathf.Abs(Velocity.z) == 0)
                     {
-                        TrySetState(Unit.States.NEUTRAL);
+                        TrySetState(Unit.STATES.NEUTRAL);
                     }
                     break;
-                case Unit.States.NEUTRAL:
-                    if (Mathf.Abs(velocity.x) > 0 || Mathf.Abs(velocity.z) > 0)
+                case Unit.STATES.NEUTRAL:
+                    if (Mathf.Abs(Velocity.x) > 0 || Mathf.Abs(Velocity.z) > 0)
                     {
-                        TrySetState(Unit.States.WALKING);
+                        TrySetState(Unit.STATES.WALKING);
                     }
                     break;
-                case Unit.States.ATTACK:
-                    if (AnimationUtil.IsAnimationDone(_animator, "PlayerAttack"))
+                case Unit.STATES.ATTACK:
+                    if (AnimationUtil.IsAnimationDone(animator, "PlayerAttack"))
                     {
-                        TrySetState(Unit.States.NEUTRAL);
+                        TrySetState(Unit.STATES.NEUTRAL);
                     }
                     break;
-                case Unit.States.DAMAGE:
-                    if (!_damageFlowStarted)
+                case Unit.STATES.DAMAGE:
+                    if (!damageFlowStarted)
                     {
-                        _damageFlowStarted = true;
+                        damageFlowStarted = true;
                         StartCoroutine(DamageStateFlow());
                     }
                     break;
 
             }
 
-            if (dimension == Unit.Dimension.LEFT)
+            if (Dimension == Unit.DIMENSION.LEFT)
             {
                 transform.localScale = new Vector3(-1, 1, 1);
             }
@@ -92,20 +92,20 @@ namespace ActionSample.Components.Unit
 
         protected new void UpdateAnimator()
         {
-            _animator.SetBool("isAttacking", false);
-            _animator.SetBool("isWalking", false);
-            _animator.SetBool("isDamaged", false);
+            animator.SetBool("isAttacking", false);
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isDamaged", false);
             switch (GetState())
             {
-                case Unit.States.WALKING:
-                    _animator.SetBool("isWalking", true);
+                case Unit.STATES.WALKING:
+                    animator.SetBool("isWalking", true);
                     break;
-                case Unit.States.ATTACK:
-                    _animator.SetBool("isAttacking", true);
+                case Unit.STATES.ATTACK:
+                    animator.SetBool("isAttacking", true);
                     break;
-                case Unit.States.DAMAGE:
-                case Unit.States.DEAD:
-                    _animator.SetBool("isDamaged", true);
+                case Unit.STATES.DAMAGE:
+                case Unit.STATES.DEAD:
+                    animator.SetBool("isDamaged", true);
                     break;
             }
         }
@@ -114,8 +114,8 @@ namespace ActionSample.Components.Unit
         {
             // @TODO: ダメージ時間もパラメータ化する
             yield return new WaitForSeconds(0.5f);
-            TrySetState(Unit.States.NEUTRAL);
-            _damageFlowStarted = false;
+            TrySetState(Unit.STATES.NEUTRAL);
+            damageFlowStarted = false;
         }
 
     }

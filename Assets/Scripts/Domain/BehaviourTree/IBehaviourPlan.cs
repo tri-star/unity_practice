@@ -11,12 +11,12 @@ namespace ActionSample.Domain.BehaviourTree
     /// </summary>
     public interface IBehaviourPlan
     {
-        string name { get; }
+        string Name { get; }
 
         void Init();
 
         void Execute(GameContext context, IUnit unit);
 
-        bool isDone();
+        bool IsDone();
     }
 }

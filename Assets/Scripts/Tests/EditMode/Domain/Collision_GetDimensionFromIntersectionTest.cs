@@ -10,9 +10,9 @@ namespace Tests
     {
         // A Test behaves as an ordinary method
         [Test, TestCaseSource("ForCollision_GetDimensionFromIntersection")]
-        public void Collision_GetDimensionFromIntersection(Bounds self, Bounds intersection, ActionSample.Domain.Collision.Dimension? expected)
+        public void Collision_GetDimensionFromIntersection(Bounds self, Bounds intersection, ActionSample.Domain.Collision.DIMENSION? expected)
         {
-            ActionSample.Domain.Collision.Dimension? result = ActionSample.Domain.Collision.GetDimensionFromIntersection(self, intersection);
+            ActionSample.Domain.Collision.DIMENSION? result = ActionSample.Domain.Collision.GetDimensionFromIntersection(self, intersection);
             Assert.That(result, Is.EqualTo(expected));
         }
 
@@ -32,7 +32,7 @@ namespace Tests
                     new Vector3(0, 0, 0),
                     new Vector3(5, 100, 20)
                 ),
-                ActionSample.Domain.Collision.Dimension.LEFT
+                ActionSample.Domain.Collision.DIMENSION.LEFT
 
             );
             t.SetName(name);
@@ -48,7 +48,7 @@ namespace Tests
                     new Vector3(45, 0, 0),
                     new Vector3(5, 100, 20)
                 ),
-                ActionSample.Domain.Collision.Dimension.RIGHT
+                ActionSample.Domain.Collision.DIMENSION.RIGHT
 
             );
             t.SetName(name);
@@ -64,7 +64,7 @@ namespace Tests
                     new Vector3(0, 95, 0),
                     new Vector3(50, 5, 20)
                 ),
-                ActionSample.Domain.Collision.Dimension.TOP
+                ActionSample.Domain.Collision.DIMENSION.TOP
 
             );
             t.SetName(name);
@@ -80,7 +80,7 @@ namespace Tests
                     new Vector3(0, 5, 0),
                     new Vector3(50, 5, 20)
                 ),
-                ActionSample.Domain.Collision.Dimension.BOTTOM
+                ActionSample.Domain.Collision.DIMENSION.BOTTOM
 
             );
             t.SetName(name);
@@ -96,7 +96,7 @@ namespace Tests
                     new Vector3(0, 0, 0),
                     new Vector3(50, 100, 5)
                 ),
-                ActionSample.Domain.Collision.Dimension.FRONT
+                ActionSample.Domain.Collision.DIMENSION.FRONT
 
             );
             t.SetName(name);
@@ -112,7 +112,7 @@ namespace Tests
                     new Vector3(0, 0, 15),
                     new Vector3(50, 100, 5)
                 ),
-                ActionSample.Domain.Collision.Dimension.REAR
+                ActionSample.Domain.Collision.DIMENSION.REAR
 
             );
             t.SetName(name);
@@ -144,7 +144,7 @@ namespace Tests
                     new Vector3(14, 15, 0),
                     new Vector3(14, 15, 20)
                 ),
-                ActionSample.Domain.Collision.Dimension.LEFT
+                ActionSample.Domain.Collision.DIMENSION.LEFT
             );
             t.SetName(name);
             yield return t;

@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0267e0c0234734147af7224decdff66e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialHealth: {fileID: 11400000, guid: b4c6affa942071e478cc7c6b6d2828c1, type: 2}
+  initialHealth: {fileID: 11400000, guid: b4c6affa942071e478cc7c6b6d2828c1, type: 2}
 --- !u!54 &6209645545120533477
 Rigidbody:
   m_ObjectHideFlags: 0

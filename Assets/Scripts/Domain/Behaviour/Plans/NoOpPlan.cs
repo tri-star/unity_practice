@@ -10,7 +10,7 @@ namespace ActionSample.Domain.Behaviour.Plans
 
         private float timeoutSec;
 
-        public string name { get { return "何もしない"; } }
+        public string Name { get { return "何もしない"; } }
 
         public NoOpPlan(float timeoutSec)
         {
@@ -31,7 +31,7 @@ namespace ActionSample.Domain.Behaviour.Plans
             timer.Update(context.TimeManager.GetDeltaTime());
         }
 
-        public bool isDone()
+        public bool IsDone()
         {
             return timer.IsDone();
         }

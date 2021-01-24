@@ -7,11 +7,11 @@ namespace ActionSample.Domain
     /// </summary>
     public class WeaponPower
     {
-        public float power
+        public float Power
         {
             get; set;
         }
-        public Vector3 force
+        public Vector3 Force
         {
             get; set;
         }
@@ -19,8 +19,8 @@ namespace ActionSample.Domain
 
         public WeaponPower(float power, Vector3 force)
         {
-            this.power = power;
-            this.force = force;
+            Power = power;
+            Force = force;
         }
     }
 

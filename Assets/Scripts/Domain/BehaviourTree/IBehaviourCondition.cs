@@ -7,6 +7,6 @@ namespace ActionSample.Domain.BehaviourTree
         /// </summary>
         /// <param name="unit">判定の対象になるユニット</param>
         /// <returns>条件を満たしたかどうか</returns>
-        bool isSatisfied(GameContext context, Components.Unit.IUnit unit);
+        bool IsSatisfied(GameContext context, Components.Unit.IUnit unit);
     }
 }

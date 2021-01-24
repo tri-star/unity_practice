@@ -13,7 +13,7 @@ namespace ActionSample.Domain.Behaviour.Conditions
             this.distance = distance;
         }
 
-        public bool isSatisfied(GameContext context, IUnit unit)
+        public bool IsSatisfied(GameContext context, IUnit unit)
         {
             var player = context.GetPlayer();
             bool isSatisfiedX = Mathf.Abs(player.transform.position.x - unit.Transform.position.x) <= distance;

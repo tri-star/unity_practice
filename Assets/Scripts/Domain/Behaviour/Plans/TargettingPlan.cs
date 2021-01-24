@@ -20,7 +20,7 @@ namespace ActionSample.Domain.Behaviour.Plans
 
         private float timeoutSec;
 
-        public string name { get { return "プレイヤーに近づく"; } }
+        public string Name { get { return "プレイヤーに近づく"; } }
 
         public TargettingPlan(float timeoutSec)
         {
@@ -61,7 +61,7 @@ namespace ActionSample.Domain.Behaviour.Plans
             }
         }
 
-        public bool isDone()
+        public bool IsDone()
         {
             return state == STATES.DONE;
         }

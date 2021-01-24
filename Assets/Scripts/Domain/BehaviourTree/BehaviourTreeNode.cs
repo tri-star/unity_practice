@@ -23,29 +23,29 @@ namespace ActionSample.Domain.BehaviourTree
         /// <summary>
         ///ノードの名前(日本語。デバッグや定義の可読性のため)。
         /// </summary>
-        public string name { get; private set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// このNodeが実行対象になるための前提条件
         /// </summary>
-        public IBehaviourCondition? condition { get; private set; }
+        public IBehaviourCondition? Condition { get; private set; }
 
         /// <summary>
         /// 自身の重み付け
         /// (値が高いほど、同じ階層の他のノードよりも選ばれる可能性が高くなる)
         /// </summary>
         /// <value></value>
-        public int weight { get; private set; }
+        public int Weight { get; private set; }
 
         /// <summary>
         /// 選択可能なノードの一覧
         /// </summary>
-        private List<BehaviourTreeNode> _children;
+        private List<BehaviourTreeNode> children;
 
         /// <summary>
         /// このノードが選択された場合に実行するプラン
         /// </summary>
-        public IBehaviourPlan? plan { get; private set; }
+        public IBehaviourPlan? Plan { get; private set; }
 
         public BehaviourTreeNode(
             string name,
@@ -54,26 +54,26 @@ namespace ActionSample.Domain.BehaviourTree
             IBehaviourCondition? condition = null,
             IBehaviourPlan? plan = null)
         {
-            this.name = name;
-            this.weight = weight;
-            this.condition = condition;
-            this.plan = plan;
-            this._children = children == null ? new List<BehaviourTreeNode>() : children;
+            Name = name;
+            Weight = weight;
+            Condition = condition;
+            Plan = plan;
+            this.children = children == null ? new List<BehaviourTreeNode>() : children;
         }
 
-        public bool isSatisfied(GameContext context, IUnit unit)
+        public bool IsSatisfied(GameContext context, IUnit unit)
         {
-            return condition?.isSatisfied(context, unit) ?? true;
+            return Condition?.IsSatisfied(context, unit) ?? true;
         }
 
         public bool HavePlan()
         {
-            return plan != null;
+            return Plan != null;
         }
 
         public void AppendChild(BehaviourTreeNode child)
         {
-            _children.Add(child);
+            children.Add(child);
         }
 
 
@@ -81,13 +81,13 @@ namespace ActionSample.Domain.BehaviourTree
         {
             foreach (var child in children)
             {
-                _children.Add(child);
+                this.children.Add(child);
             }
         }
 
         public void SetPlan(IBehaviourPlan plan)
         {
-            this.plan = plan;
+            Plan = plan;
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace ActionSample.Domain.BehaviourTree
         /// <param name="unit"></param>
         public BehaviourTreeNode? GetSatisfiedNode(GameContext context, IUnit unit)
         {
-            List<BehaviourTreeNode> satisfiedNodes = _children.Where(n => n.isSatisfied(context, unit)).ToList();
+            List<BehaviourTreeNode> satisfiedNodes = children.Where(n => n.IsSatisfied(context, unit)).ToList();
             if (satisfiedNodes.Count == 0)
             {
                 return null;
@@ -105,7 +105,7 @@ namespace ActionSample.Domain.BehaviourTree
             int weightTotal = 0;
             foreach (var child in satisfiedNodes)
             {
-                weightTotal += child.weight;
+                weightTotal += child.Weight;
             }
 
             var randomGenerator = context.RandomGeneratorManager.Get("Game");
@@ -113,13 +113,13 @@ namespace ActionSample.Domain.BehaviourTree
             int currentWeight = 0;
             BehaviourTreeNode? selectedNode = null;
 
-            foreach (var child in _children)
+            foreach (var child in children)
             {
-                if (randomValue >= currentWeight && randomValue < (currentWeight + child.weight))
+                if (randomValue >= currentWeight && randomValue < (currentWeight + child.Weight))
                 {
                     return child;
                 }
-                currentWeight += child.weight;
+                currentWeight += child.Weight;
             }
             return selectedNode;
         }
