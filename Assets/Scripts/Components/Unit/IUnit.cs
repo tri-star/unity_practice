@@ -5,6 +5,18 @@ namespace ActionSample.Components.Unit
 {
     public interface IUnit : IComponent
     {
+        #region Coordinates
+        /// <summary>
+        ///指定した方向に力を加える
+        /// </summary>
+        /// <param name="force">加速度</param>
+        void AddForce(Vector3 force);
+
+        /// <summary>
+        /// ユニットが着地しているかを返す
+        /// </summary>
+        bool IsGrounded();
+
         /// <summary>
         /// 指定方向に歩かせる
         /// </summary>
@@ -13,26 +25,9 @@ namespace ActionSample.Components.Unit
         void MoveToward(float x, float z);
 
         /// <summary>
-        ///指定した方向に力を加える
-        /// </summary>
-        /// <param name="force">加速度</param>
-        void AddForce(Vector3 force);
-
-        /// <summary>
         /// 加速度をゼロにして停止させる
         /// </summary>
         void StopForce();
-
-        /// <summary>
-        /// 現在の状態を返す
-        /// </summary>
-        STATES GetState();
-
-        /// <summary>
-        /// 現在の状態を強制的にセットする
-        /// </summary>
-        /// <param name="newState"></param>
-        void SetState(STATES newState);
 
         /// <summary>
         /// 向いている方向
@@ -50,10 +45,20 @@ namespace ActionSample.Components.Unit
             get; set;
         }
 
+        #endregion
+
+        #region States
+
         /// <summary>
-        /// ユニットが着地しているかを返す
+        /// 現在の状態を返す
         /// </summary>
-        bool IsGrounded();
+        STATES GetState();
+
+        /// <summary>
+        /// 現在の状態を強制的にセットする
+        /// </summary>
+        /// <param name="newState"></param>
+        void SetState(STATES newState);
 
         /// <summary>
         /// 指定された状態に遷移可能かを返す
@@ -61,6 +66,10 @@ namespace ActionSample.Components.Unit
         /// <param name="newState">遷移したい状態の値</param>
         /// <returns>状態遷移可能かどうか</returns>
         bool TrySetState(STATES newState);
+
+        #endregion
+
+        #region MonoBehaviour
 
         /// <summary>
         /// ユニットが属しているGameObjectの他のコンポーネントを取得して返す
@@ -82,5 +91,7 @@ namespace ActionSample.Components.Unit
 
         Bounds Bounds
         { get; }
+
+        #endregion
     }
 }

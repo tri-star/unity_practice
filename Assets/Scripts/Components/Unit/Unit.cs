@@ -63,6 +63,8 @@ namespace ActionSample.Components.Unit
             state = STATES.NEUTRAL;
         }
 
+        #region MonoBehaviour
+
         public void FixedUpdate()
         {
             float forceY = velocity.y;
@@ -120,7 +122,29 @@ namespace ActionSample.Components.Unit
             }
         }
 
+        public Transform Transform
+        {
+            get { return gameObject.transform; }
+        }
 
+        public Bounds Bounds
+        {
+            get { return gameObject.GetComponent<Collider>().bounds; }
+        }
+
+        #endregion
+
+
+        #region Coordinates
+        public void AddForce(Vector3 force)
+        {
+            velocity += force;
+
+            if (velocity.y > 1)
+            {
+                groundCollider = null;
+            }
+        }
 
         public void MoveToward(float x, float z)
         {
@@ -138,14 +162,13 @@ namespace ActionSample.Components.Unit
             }
         }
 
-        public void AddForce(Vector3 force)
+        /// <summary>
+        /// ユニットが着地しているかを返す
+        /// </summary>
+        /// <returns></returns>
+        public bool IsGrounded()
         {
-            velocity += force;
-
-            if (velocity.y > 1)
-            {
-                groundCollider = null;
-            }
+            return this.groundCollider == null ? false : true;
         }
 
 
@@ -154,20 +177,11 @@ namespace ActionSample.Components.Unit
             velocity = new Vector3(0, 0, 0);
         }
 
-        public STATES GetState()
+        public bool AffectGravity
         {
-            return state;
+            get { return affectGravity; }
+            set { affectGravity = value; }
         }
-
-        public void SetState(STATES newState)
-        {
-            STATES oldState = state;
-            state = newState;
-
-            signalBus.Fire<UnitStateChangeSignal>(new UnitStateChangeSignal { oldState = oldState, newState = newState });
-            OnChangeState(newState);
-        }
-
 
         public DIMENSION Dimension
         {
@@ -180,95 +194,6 @@ namespace ActionSample.Components.Unit
             get { return velocity; }
             set { velocity = value; }
         }
-
-        public bool AffectGravity
-        {
-            get { return affectGravity; }
-            set { affectGravity = value; }
-        }
-
-        /// <summary>
-        /// ユニットが着地しているかを返す
-        /// </summary>
-        /// <returns></returns>
-        public bool IsGrounded()
-        {
-            return this.groundCollider == null ? false : true;
-        }
-
-
-        public Transform Transform
-        {
-            get { return gameObject.transform; }
-        }
-
-        public Bounds Bounds
-        {
-            get { return gameObject.GetComponent<Collider>().bounds; }
-        }
-
-        /// <summary>
-        /// 指定された状態への遷移が可能かどうかを調べて可能な場合に状態遷移する
-        /// </summary>
-        /// <param name="newState">遷移したい状態の値</param>
-        /// <returns>状態遷移が出来たかどうか</returns>
-        public bool TrySetState(Unit.STATES newState)
-        {
-            if (CanTransitionState(newState))
-            {
-                SetState(newState);
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 指定された状態に遷移可能かを返す
-        /// </summary>
-        /// <param name="newState">遷移したい状態の値</param>
-        /// <returns>状態遷移可能かどうか</returns>
-        protected bool CanTransitionState(Unit.STATES newState)
-        {
-            // @TODO: ドメインに関する実装として切り出す
-            switch (GetState())
-            {
-                case Unit.STATES.NEUTRAL:
-                    return true;
-                case Unit.STATES.WALKING:
-                    return true;
-                case Unit.STATES.ATTACK:
-                    if (newState == Unit.STATES.WALKING)
-                    {
-                        return false;
-                    }
-                    return true;
-                case Unit.STATES.DAMAGE:
-                    if (newState != Unit.STATES.NEUTRAL)
-                    {
-                        return false;
-                    }
-                    return true;
-                case Unit.STATES.DEAD:
-                    return false;
-            }
-            throw new NotSupportedException($"無効な状態が指定されました: {GetState()}");
-        }
-
-        /// <summary>
-        /// 状態が変更された時に呼び出される処理
-        /// </summary>
-        /// <param name="newState">新しい状態</param>
-        protected void OnChangeState(STATES newState)
-        {
-        }
-
-        /// <summary>
-        /// ユニットの状態に応じてAnimatorを更新する
-        /// </summary>
-        protected void UpdateAnimator()
-        {
-        }
-
 
         // @TODO: 判定と位置調整の処理は外部のサービスクラスに切り出す
         private void checkGrounded(Collision collision)
@@ -334,6 +259,88 @@ namespace ActionSample.Components.Unit
             }
             this.transform.Translate(new Vector3(adjustX, 0, adjustZ));
         }
+
+        #endregion
+
+        #region States
+
+        /// <summary>
+        /// 指定された状態に遷移可能かを返す
+        /// </summary>
+        /// <param name="newState">遷移したい状態の値</param>
+        /// <returns>状態遷移可能かどうか</returns>
+        protected bool CanTransitionState(Unit.STATES newState)
+        {
+            // @TODO: ドメインに関する実装として切り出す
+            switch (GetState())
+            {
+                case Unit.STATES.NEUTRAL:
+                    return true;
+                case Unit.STATES.WALKING:
+                    return true;
+                case Unit.STATES.ATTACK:
+                    if (newState == Unit.STATES.WALKING)
+                    {
+                        return false;
+                    }
+                    return true;
+                case Unit.STATES.DAMAGE:
+                    if (newState != Unit.STATES.NEUTRAL)
+                    {
+                        return false;
+                    }
+                    return true;
+                case Unit.STATES.DEAD:
+                    return false;
+            }
+            throw new NotSupportedException($"無効な状態が指定されました: {GetState()}");
+        }
+
+        public STATES GetState()
+        {
+            return state;
+        }
+
+        public void SetState(STATES newState)
+        {
+            STATES oldState = state;
+            state = newState;
+
+            signalBus.Fire<UnitStateChangeSignal>(new UnitStateChangeSignal { oldState = oldState, newState = newState });
+            OnChangeState(newState);
+        }
+
+        /// <summary>
+        /// 状態が変更された時に呼び出される処理
+        /// </summary>
+        /// <param name="newState">新しい状態</param>
+        protected void OnChangeState(STATES newState)
+        {
+        }
+
+        /// <summary>
+        /// 指定された状態への遷移が可能かどうかを調べて可能な場合に状態遷移する
+        /// </summary>
+        /// <param name="newState">遷移したい状態の値</param>
+        /// <returns>状態遷移が出来たかどうか</returns>
+        public bool TrySetState(Unit.STATES newState)
+        {
+            if (CanTransitionState(newState))
+            {
+                SetState(newState);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// ユニットの状態に応じてAnimatorを更新する
+        /// </summary>
+        protected void UpdateAnimator()
+        {
+        }
+
+        #endregion
 
     }
 
