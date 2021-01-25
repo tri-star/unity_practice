@@ -1,3 +1,4 @@
+using ActionSample.Components.Ui;
 using ActionSample.Components.Unit;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
@@ -22,16 +23,26 @@ namespace ActionSample.Scenes
         GameObject leftWall;
         GameObject rightWall;
 
+        StatusCardOrganizer statusCardOrganizer = null;
+
         private void Start()
         {
             this.pixelPerfectCamera = this.mainCamera.GetComponent<PixelPerfectCamera>();
 
             this.BuildWall();
             this.mainCamera.transform.eulerAngles = new Vector3(30.0f, 0, 0);
+            statusCardOrganizer = GameObject.FindGameObjectWithTag("status_card_organizer").GetComponent<StatusCardOrganizer>();
+            statusCardOrganizer.Add(player.GetComponent<IUnit>());
         }
 
         // Update is called once per frame
         void FixedUpdate()
+        {
+            this.handleInput();
+        }
+
+
+        void LateUpdate()
         {
             float screenW = this.pixelPerfectCamera.refResolutionX;
             float screenH = this.pixelPerfectCamera.refResolutionY;
@@ -42,7 +53,6 @@ namespace ActionSample.Scenes
 
             this.mainCamera.transform.position = new Vector3(cameraX, cameraY);
 
-            this.handleInput();
         }
 
         private void handleInput()

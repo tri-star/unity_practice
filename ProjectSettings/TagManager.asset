@@ -7,6 +7,9 @@ TagManager:
   - ground
   - obstacle
   - attack
+  - background
+  - floor
+  - status_card_organizer
   layers:
   - Default
   - TransparentFX
