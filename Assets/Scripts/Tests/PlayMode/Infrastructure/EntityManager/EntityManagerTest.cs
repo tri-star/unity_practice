@@ -2,6 +2,10 @@ using NUnit.Framework;
 using ActionSample.Infrastructure.EntityManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using ActionSample.Components.Unit;
+using System.Collections.Generic;
+using UnityEngine.TestTools;
+using System.Collections;
 
 namespace Tests.Infrastructure.EntityManager
 {
@@ -66,7 +70,6 @@ namespace Tests.Infrastructure.EntityManager
             var result = entityManager.FindObjectWithTag("obstacle", useCache: false);
             Assert.That(result, Is.EqualTo(g2));
         }
-
 
     }
 }

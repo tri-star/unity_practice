@@ -1,12 +1,22 @@
 using ActionSample.Components.Ui;
 using ActionSample.Components.Unit;
+using ActionSample.Domain;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
+using System.Linq;
+using Zenject;
+
 
 namespace ActionSample.Scenes
 {
     public class BattleSceneController : MonoBehaviour
     {
+        private enum SCENE_STATUS
+        {
+            INITIAL,
+            INGAME,
+        }
+
         [SerializeField]
         Camera mainCamera;
 
@@ -15,6 +25,9 @@ namespace ActionSample.Scenes
 
         [SerializeField]
         Joystick joystick;
+
+        [Inject]
+        GameContext gameContext;
 
         PixelPerfectCamera pixelPerfectCamera;
 
@@ -25,20 +38,44 @@ namespace ActionSample.Scenes
 
         StatusCardOrganizer statusCardOrganizer = null;
 
-        private void Start()
+        SCENE_STATUS state;
+
+        public void Start()
         {
             this.pixelPerfectCamera = this.mainCamera.GetComponent<PixelPerfectCamera>();
 
             this.BuildWall();
             this.mainCamera.transform.eulerAngles = new Vector3(30.0f, 0, 0);
             statusCardOrganizer = GameObject.FindGameObjectWithTag("status_card_organizer").GetComponent<StatusCardOrganizer>();
-            statusCardOrganizer.Add(player.GetComponent<IUnit>());
+
+            state = SCENE_STATUS.INITIAL;
         }
 
         // Update is called once per frame
         void FixedUpdate()
         {
-            this.handleInput();
+            switch (state)
+            {
+                case SCENE_STATUS.INITIAL:
+                    Init();
+                    break;
+                case SCENE_STATUS.INGAME:
+                    this.handleInput();
+                    break;
+            }
+        }
+
+
+        private void Init()
+        {
+            gameContext.EntityManager.EntityAddEvent.AddListener(statusCardOrganizer.OnAddUnit);
+
+            foreach (var gameObject in GameObject.FindObjectsOfType<GameObject>().Where(g => g.GetComponent<IUnit>() != null))
+            {
+                Debug.Log(gameObject.GetHashCode());
+                gameContext.EntityManager.AddEntity(gameObject.GetComponent<IUnit>());
+            }
+            state = SCENE_STATUS.INGAME;
         }
 
 

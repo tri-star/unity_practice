@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ActionSample.Components.Unit;
+using ActionSample.Domain.EntityManager;
 using UnityEngine;
 
 namespace ActionSample.Components.Ui
@@ -21,10 +22,16 @@ namespace ActionSample.Components.Ui
 
         }
 
+
+        public void OnAddUnit(EntityAddEvent e)
+        {
+            Add(e.Unit);
+        }
+
         public void Add(IUnit unit)
         {
             var cardObject = Instantiate(cardPrefab);
-            cardObject.transform.parent = transform;
+            cardObject.transform.SetParent(transform);
 
             var card = cardObject.GetComponent<StatusCard>();
             card.Init(unit, CalcuratePosition());

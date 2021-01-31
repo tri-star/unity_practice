@@ -8,6 +8,7 @@ using ActionSample.Infrastructure.TimeManager;
 using ActionSample.Parameters;
 using ActionSample.Signals;
 using Zenject;
+using ActionSample.Domain.EntityManager;
 
 public class GameInstaller : MonoInstaller<GameInstaller>
 {

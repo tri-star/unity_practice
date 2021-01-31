@@ -1,4 +1,5 @@
 #nullable enable
+using ActionSample.Domain.EntityManager;
 using ActionSample.Domain.RandomGenerator;
 using UnityEngine;
 
