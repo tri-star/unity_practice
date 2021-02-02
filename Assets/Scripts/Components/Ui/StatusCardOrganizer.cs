@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using ActionSample.Components.Unit;
 using ActionSample.Domain.EntityManager;
+using ActionSample.Signals;
 using UnityEngine;
+using Zenject;
 
 namespace ActionSample.Components.Ui
 {
@@ -12,9 +14,13 @@ namespace ActionSample.Components.Ui
         private GameObject cardPrefab;
         private List<StatusCard> cards;
 
+        [Inject]
+        private SignalBus signalBus;
+
         void Awake()
         {
             cards = new List<StatusCard>();
+            signalBus.Subscribe<UnitBornSignal>(OnUnitBorn);
         }
 
         void FixedUpdate()
@@ -22,6 +28,11 @@ namespace ActionSample.Components.Ui
 
         }
 
+
+        public void OnUnitBorn(UnitBornSignal signal)
+        {
+            Add(signal.Unit);
+        }
 
         public void OnAddUnit(EntityAddEvent e)
         {

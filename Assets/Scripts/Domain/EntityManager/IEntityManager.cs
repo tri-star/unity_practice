@@ -7,8 +7,6 @@ namespace ActionSample.Domain.EntityManager
 {
     public interface IEntityManager
     {
-        UnityEvent<EntityAddEvent> EntityAddEvent { get; }
-
         GameObject? FindObjectWithTag(string tag, bool useCache = false);
 
 

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using ActionSample.Components.Unit;
 using ActionSample.Domain.EntityManager;
 using UnityEngine.Events;
+using Zenject;
+using ActionSample.Signals;
 
 namespace ActionSample.Infrastructure.EntityManager
 {
@@ -15,23 +17,19 @@ namespace ActionSample.Infrastructure.EntityManager
         // TODO: 後でIEntityに変更する
         Dictionary<int, IUnit> entities;
 
-        public UnityEvent<EntityAddEvent> EntityAddEvent
-        {
-            get;
-            private set;
-        }
+        SignalBus signalBus;
 
-        public EntityManagerUnity()
+        public EntityManagerUnity(SignalBus signalBus)
         {
             taggedObjectCache = new Dictionary<string, GameObject>();
             entities = new Dictionary<int, IUnit>();
-            EntityAddEvent = new UnityEvent<EntityAddEvent>();
+            this.signalBus = signalBus;
         }
 
         public void AddEntity(IUnit entity)
         {
             entities.Add(entity.GetHashCode(), entity);
-            EntityAddEvent.Invoke(new EntityAddEvent(entity));
+            signalBus.TryFire(new UnitBornSignal(entity));
         }
 
         public GameObject? FindObjectWithTag(string tag, bool useCache = false)

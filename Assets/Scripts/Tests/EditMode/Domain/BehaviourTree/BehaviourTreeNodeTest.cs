@@ -29,15 +29,20 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
         protected RandomGeneratorStub? randomGenerator;
 
+        protected SignalBus? signalBus;
+
         [SetUp]
         public void CommonInstall()
         {
+            SignalBusInstaller.Install(Container);
+            signalBus = Container.Resolve<SignalBus>();
+
             randomGenerator = new RandomGeneratorStub();
             var randomGeneratorMap = new Dictionary<string, IRandomGenerator>()
             {
                 {"Game", randomGenerator}
             };
-            var context = EditModeUtil.CreateGameContext(randomGeneratorMap: randomGeneratorMap);
+            var context = EditModeUtil.CreateGameContext(signalBus, randomGeneratorMap: randomGeneratorMap);
 
             gameObject = new GameObject();
             gameObject.AddComponent<PlayerUnit>();

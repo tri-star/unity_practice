@@ -2,21 +2,24 @@ using NUnit.Framework;
 using ActionSample.Infrastructure.EntityManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using ActionSample.Components.Unit;
-using System.Collections.Generic;
-using UnityEngine.TestTools;
-using System.Collections;
+using Zenject;
 
 namespace Tests.Infrastructure.EntityManager
 {
-    class EntityManagerTest
+    class EntityManagerTest : ZenjectIntegrationTestFixture
     {
         private EntityManagerUnity entityManager;
+
+        private SignalBus signalBus;
 
         [SetUp]
         public void SetUp()
         {
-            entityManager = new EntityManagerUnity();
+            PreInstall();
+            SignalBusInstaller.Install(Container);
+            PostInstall();
+            signalBus = Container.Resolve<SignalBus>();
+            entityManager = new EntityManagerUnity(signalBus);
             SceneManager.LoadScene("EntityManagerTest");
 
             foreach (var gameObject in GameObject.FindObjectsOfType<GameObject>())

@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "SampleAction",
-        "Zenject-TestFramework"
+        "Zenject-TestFramework",
+        "Zenject"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -68,8 +68,6 @@ namespace ActionSample.Scenes
 
         private void Init()
         {
-            gameContext.EntityManager.EntityAddEvent.AddListener(statusCardOrganizer.OnAddUnit);
-
             foreach (var gameObject in GameObject.FindObjectsOfType<GameObject>().Where(g => g.GetComponent<IUnit>() != null))
             {
                 Debug.Log(gameObject.GetHashCode());

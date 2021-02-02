@@ -28,13 +28,18 @@ namespace Tests.EditMode.Domain.BehaviourTree
 
         protected GameContext gameContext;
 
+        protected SignalBus signalBus;
+
         [SetUp]
         public void CommonInstall()
         {
+            SignalBusInstaller.Install(Container);
+            signalBus = Container.Resolve<SignalBus>();
+
             gameObject = new GameObject();
             gameObject.AddComponent<PlayerUnit>();
 
-            GameContext context = EditModeUtil.CreateGameContext();
+            GameContext context = EditModeUtil.CreateGameContext(signalBus);
             Container.Bind<GameContext>().FromInstance(context).AsSingle();
         }
     }

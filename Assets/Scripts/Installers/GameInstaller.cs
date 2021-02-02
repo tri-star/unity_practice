@@ -17,6 +17,7 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         SignalBusInstaller.Install(Container);
 
         Container.DeclareSignal<PlayerAttackSignal>().OptionalSubscriber();
+        Container.DeclareSignal<UnitBornSignal>().OptionalSubscriber();
         Container.DeclareSignal<UnitStateChangeSignal>().OptionalSubscriber();
         Container.DeclareSignal<UnitDamageSignal>().OptionalSubscriber();
         Container.DeclareSignal<UnitKilledSignal>().OptionalSubscriber();
