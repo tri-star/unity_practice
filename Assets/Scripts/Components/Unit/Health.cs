@@ -1,6 +1,8 @@
 using UnityEngine;
 using ActionSample.Parameters.Unit;
 using UnityEngine.Events;
+using Zenject;
+using ActionSample.Signals;
 
 namespace ActionSample.Components.Unit
 {
@@ -10,6 +12,9 @@ namespace ActionSample.Components.Unit
         private HealthSetting initialHealth;
 
         private IUnit unit;
+
+        [Inject]
+        SignalBus signalBus;
 
         public UnityEvent<UnitDamageEvent> DamageEvent { get; private set; }
 
@@ -36,6 +41,7 @@ namespace ActionSample.Components.Unit
             if (CurrentHp <= 0)
             {
                 unit.SetState(Unit.STATES.DEAD);
+                signalBus.TryFire(new UnitKilledSignal(unit));
             }
         }
 
