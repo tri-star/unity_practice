@@ -29,8 +29,19 @@ namespace ActionSample.Domain.Behaviour
                 ),
                 new BehaviourTreeNode(
                     name: "プレイヤーが射程内",
-                    condition: new ContactWithPlayer(50),
-                    plan: new MeleePlan()
+                    condition: new ContactWithPlayer(60),
+                    children: new List<BehaviourTreeNode>() {
+                        new BehaviourTreeNode(
+                            name: "攻撃する",
+                            weight: 50,
+                            plan: new MeleePlan()
+                        ),
+                        new BehaviourTreeNode(
+                            name: "何もしない",
+                            weight: 10,
+                            plan: new NoOpPlan(0.8f)
+                        ),
+                    }
                 )
             });
         }
