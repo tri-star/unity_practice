@@ -7,6 +7,7 @@ namespace ActionSample.Parameters.Unit
     {
         public float hp;
         public float power;
+        public Sprite face;
     }
 
 }

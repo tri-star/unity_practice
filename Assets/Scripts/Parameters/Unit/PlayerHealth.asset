@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 5000
   power: 1000
+  face: {fileID: 352667614993179775, guid: e2381a3066515c049899c7359757681b, type: 3}

@@ -3,6 +3,7 @@ using ActionSample.Components.Unit;
 using ActionSample.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace ActionSample.Components.Ui
 {
@@ -63,6 +64,7 @@ namespace ActionSample.Components.Ui
             transform.localPosition = position;
             hpGauge.GetComponent<HpGauge>().Init(unit);
             animator.SetBool("isClosing", false);
+            SetFaceImage(unit);
         }
 
         public void Close()
@@ -80,6 +82,14 @@ namespace ActionSample.Components.Ui
         public void Dispose()
         {
             CloseEvent.RemoveAllListeners();
+        }
+
+
+        private void SetFaceImage(IUnit unit)
+        {
+            Health health = unit.GetComponent<Health>();
+            GameObject face = transform.Find("Face").gameObject;
+            face.GetComponent<Image>().sprite = health.Face;
         }
     }
 }

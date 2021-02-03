@@ -23,6 +23,7 @@ namespace ActionSample.Components.Unit
             CurrentHp = initialHealth.hp;
             MaxHp = initialHealth.hp;
             Power = initialHealth.power;
+            Face = initialHealth.face;
             unit = GetComponent<IUnit>();
             DamageEvent = new UnityEvent<UnitDamageEvent>();
         }
@@ -32,6 +33,8 @@ namespace ActionSample.Components.Unit
         public float MaxHp { get; private set; }
 
         public float Power { get; private set; }
+
+        public Sprite Face { get; private set; }
 
         public void TakeDamage(float damage)
         {
