@@ -32,7 +32,7 @@ public class FadeController : MonoBehaviour
         rectTransform.sizeDelta = new Vector2(canvasRect.sizeDelta.x, canvasRect.sizeDelta.y);
 
         state = States.WAIT;
-        fadeSpeed = 2.0f;
+        fadeSpeed = 1.0f;
 
     }
 
