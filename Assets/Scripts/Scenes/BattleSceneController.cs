@@ -31,7 +31,7 @@ namespace ActionSample.Scenes
 
         PixelPerfectCamera pixelPerfectCamera;
 
-        SceneTransitionHandler sceneTransitionHandler;
+        SceneTransition sceneTransitionHandler;
 
         GameObject frontWall;
         GameObject rearWall;
@@ -54,7 +54,7 @@ namespace ActionSample.Scenes
 
             sceneTransitionHandler =
                 GameObject.FindGameObjectWithTag("transition_handler")
-                .GetComponent<SceneTransitionHandler>();
+                .GetComponent<SceneTransition>();
 
             state = SCENE_STATUS.INITIAL;
         }
@@ -81,7 +81,7 @@ namespace ActionSample.Scenes
                 Debug.Log(gameObject.GetHashCode());
                 gameContext.EntityManager.AddEntity(gameObject.GetComponent<IUnit>());
             }
-            sceneTransitionHandler.Begin(SceneTransitionHandler.MODE.FADEIN);
+            sceneTransitionHandler.Begin(SceneTransition.MODE.FADEIN);
             state = SCENE_STATUS.INGAME;
         }
 

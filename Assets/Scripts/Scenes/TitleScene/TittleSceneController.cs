@@ -15,7 +15,7 @@ public class TittleSceneController : MonoBehaviour
 
     private STATES state;
 
-    private SceneTransitionHandler sceneTransitionHandler;
+    private SceneTransition sceneTransitionHandler;
 
     void Start()
     {
@@ -31,9 +31,9 @@ public class TittleSceneController : MonoBehaviour
                 var startButton = transform.GetComponentInChildren<StartButton>();
                 startButton.Subscribe(this.HandleStartButtonClick);
 
-                sceneTransitionHandler = transform.GetComponentInChildren<SceneTransitionHandler>();
+                sceneTransitionHandler = transform.GetComponentInChildren<SceneTransition>();
                 sceneTransitionHandler.SubscribeFadeOut(HandleFadeOutEnd);
-                sceneTransitionHandler.Begin(SceneTransitionHandler.MODE.FADEIN, 2.0f);
+                sceneTransitionHandler.Begin(SceneTransition.MODE.FADEIN, 2.0f);
                 state = STATES.MAIN;
                 break;
 
@@ -46,7 +46,7 @@ public class TittleSceneController : MonoBehaviour
 
     void HandleStartButtonClick()
     {
-        sceneTransitionHandler.Begin(SceneTransitionHandler.MODE.FADEOUT);
+        sceneTransitionHandler.Begin(SceneTransition.MODE.FADEOUT);
     }
 
 

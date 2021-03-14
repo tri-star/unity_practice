@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace ActionSample.Components.Ui
 {
-    public class SceneTransitionHandler : MonoBehaviour
+    public class SceneTransition : MonoBehaviour
     {
         public enum MODE
         {
@@ -14,7 +14,7 @@ namespace ActionSample.Components.Ui
             FADEOUT
         }
 
-        private enum States
+        private enum STATES
         {
             WAIT,
             INPROGRESS,
@@ -23,7 +23,7 @@ namespace ActionSample.Components.Ui
 
         private MODE mode;
 
-        private States state;
+        private STATES state;
 
         private float fade;
 
@@ -38,26 +38,29 @@ namespace ActionSample.Components.Ui
 
         void Awake()
         {
-            state = States.WAIT;
+            state = STATES.WAIT;
             gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(640, 360);
         }
 
         void Update()
         {
-            gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+            if (state != STATES.DONE)
+            {
+                gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+            }
         }
 
         void FixedUpdate()
         {
             switch (state)
             {
-                case States.WAIT:
+                case STATES.WAIT:
                     mode = MODE.FADEOUT;
                     fadeSpeed = defaultFadeSpeed;
                     fade = 0;
                     UpdateAlpha(0);
                     break;
-                case States.INPROGRESS:
+                case STATES.INPROGRESS:
                     fade += (1.0f / (60.0f * fadeSpeed));
                     if (fade > 1)
                     {
@@ -65,7 +68,7 @@ namespace ActionSample.Components.Ui
                     }
                     UpdateAlpha(fade);
                     break;
-                case States.DONE:
+                case STATES.DONE:
                     break;
             }
         }
@@ -80,7 +83,7 @@ namespace ActionSample.Components.Ui
             rectTransform.position = new Vector2(0, 0);
 
             this.mode = mode;
-            state = States.INPROGRESS;
+            state = STATES.INPROGRESS;
             fade = 0;
             UpdateAlpha(fade);
         }
@@ -107,7 +110,7 @@ namespace ActionSample.Components.Ui
 
         private void Complete()
         {
-            state = States.DONE;
+            state = STATES.DONE;
             if (mode == MODE.FADEIN)
             {
                 gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 999);
