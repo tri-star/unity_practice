@@ -17,3 +17,32 @@ platform :android do
         )
     end
 end
+
+platform :ios do
+
+    desc "Create certs"
+    lane :create_certs do
+
+        create_keychain(
+            default_keychain: true,
+            name: "mykeychain",
+            password: ENV["KEYCHAIN_PASSWORD"],
+            unlock: true,
+            timeout: 180
+        )
+
+        match(
+            readonly: false,
+            type: "adhoc",
+            keychain_name: "mykeychain",
+            keychain_password: ENV["KEYCHAIN_PASSWORD"],
+            verbose: true
+        )
+
+        slack(
+            message: "Init certificate complete.",
+            slack_url: ENV["SLACK_URL"]
+        )
+    end
+
+end
