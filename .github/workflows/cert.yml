@@ -13,8 +13,10 @@ jobs:
 
       - name: Install fastlane and plugins
         run: |
-          cd ios
-          gem install bundler
+          cd deploy
+          ruby -v
+          gem env
+          gem install bundler -v 2.2.4
           bundle install
 
       - name: Run fastlane
@@ -27,5 +29,5 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
         run: |
-          cd ios
+          cd deploy
           bundle exec fastlane ios create_certs --verbose
