@@ -142,29 +142,63 @@ jobs:
   #         name: Upload artifact
   #         path: builds/StandaloneWindows/
 
-  # buildiOSDev:
-  #   name: Build for iOS(Dev)
-  #   runs-on: ubuntu-latest
-  #   needs: test
-  #   env:
-  #     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-  #     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  #     UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
-  #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v2
-  #       with:
-  #         lfs: true
-  #     - name: Cache Library
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: Library
-  #         key: Library-iOS
-  #         restore-keys: Library-
-  #     - name: Build Unity Project
-  #       uses: game-ci/unity-builder@main
-  #       with:
-  #         targetPlatform: iOS
-  #         buildsPath: builds         
-  #     - name: List BuildDir
-  #       run: ls -l builds
+  buildiOSDev:
+    name: Build for iOS(Dev)
+    runs-on: ubuntu-latest
+    # needs: test
+    env:
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Cache Library
+        uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-iOS
+          restore-keys: Library-
+      - name: Restore GoogleService-info.plist
+        run: |
+          echo "${GOOGLE_SERVICE_INFO_PLIST}" | base64 -d > Assets/GoogleService-Info.plist
+        env:
+          GOOGLE_SERVICE_INFO_PLIST: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST }}
+      - name: Build Unity Project
+        uses: game-ci/unity-builder@main
+        with:
+          targetPlatform: iOS
+          buildsPath: builds         
+      - name: List BuildDir
+        run: ls -l builds
+
+      # - uses: actions/setup-node@v1
+      #   with:
+      #     node-version: '10.x'
+
+      # - name: install firebase-tools
+      #   run: npm install -g firebase-tools
+
+      # - uses: actions/setup-ruby@v1
+      #   with:
+      #     ruby-version: '2.6'
+
+      # - name: Install fastlane and plugins
+      #   run: |
+      #     cd deploy
+      #     ruby -v
+      #     gem env
+      #     gem install bundler -v 2.2.4
+      #     bundle install
+
+      # - name: Adhoc distribution
+      #   env:
+      #     SLACK_URL: ${{ secrets.SLACK_URL }}
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      #     FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+      #     APK_PATH: "../builds/Android/Android.apk"
+      #   run: |
+      #     cd deploy
+      #     bundle exec fastlane adhoc --verbose
