@@ -10,11 +10,12 @@ TagManager:
   - background
   - floor
   - status_card_organizer
+  - transition_handler
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Transition
   - Water
   - UI
   - 
@@ -49,4 +50,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 1695470785
+    locked: 0
+  - name: Transition
+    uniqueID: 2403780951
     locked: 0

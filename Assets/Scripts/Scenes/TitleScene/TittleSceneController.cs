@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ActionSample.Components.Ui;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +15,7 @@ public class TittleSceneController : MonoBehaviour
 
     private STATES state;
 
-    private FadeController fadeController;
+    private SceneTransitionHandler sceneTransitionHandler;
 
     void Start()
     {
@@ -30,8 +31,9 @@ public class TittleSceneController : MonoBehaviour
                 var startButton = transform.GetComponentInChildren<StartButton>();
                 startButton.Subscribe(this.HandleStartButtonClick);
 
-                fadeController = transform.GetComponentInChildren<FadeController>();
-                fadeController.SubscribeFadeEnd(HandleFadeEnd);
+                sceneTransitionHandler = transform.GetComponentInChildren<SceneTransitionHandler>();
+                sceneTransitionHandler.SubscribeFadeOut(HandleFadeOutEnd);
+                sceneTransitionHandler.Begin(SceneTransitionHandler.MODE.FADEIN, 2.0f);
                 state = STATES.MAIN;
                 break;
 
@@ -44,11 +46,11 @@ public class TittleSceneController : MonoBehaviour
 
     void HandleStartButtonClick()
     {
-        fadeController.StartFade();
+        sceneTransitionHandler.Begin(SceneTransitionHandler.MODE.FADEOUT);
     }
 
 
-    void HandleFadeEnd()
+    void HandleFadeOutEnd()
     {
         state = STATES.LEAVE;
     }

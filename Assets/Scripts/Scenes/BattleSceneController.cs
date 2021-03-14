@@ -31,6 +31,8 @@ namespace ActionSample.Scenes
 
         PixelPerfectCamera pixelPerfectCamera;
 
+        SceneTransitionHandler sceneTransitionHandler;
+
         GameObject frontWall;
         GameObject rearWall;
         GameObject leftWall;
@@ -46,7 +48,13 @@ namespace ActionSample.Scenes
 
             this.BuildWall();
             this.mainCamera.transform.eulerAngles = new Vector3(30.0f, 0, 0);
-            statusCardOrganizer = GameObject.FindGameObjectWithTag("status_card_organizer").GetComponent<StatusCardOrganizer>();
+            statusCardOrganizer =
+                GameObject.FindGameObjectWithTag("status_card_organizer")
+                .GetComponent<StatusCardOrganizer>();
+
+            sceneTransitionHandler =
+                GameObject.FindGameObjectWithTag("transition_handler")
+                .GetComponent<SceneTransitionHandler>();
 
             state = SCENE_STATUS.INITIAL;
         }
@@ -73,6 +81,7 @@ namespace ActionSample.Scenes
                 Debug.Log(gameObject.GetHashCode());
                 gameContext.EntityManager.AddEntity(gameObject.GetComponent<IUnit>());
             }
+            sceneTransitionHandler.Begin(SceneTransitionHandler.MODE.FADEIN);
             state = SCENE_STATUS.INGAME;
         }
 
