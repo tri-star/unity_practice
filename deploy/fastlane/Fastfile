@@ -63,7 +63,7 @@ platform :ios do
         )
 
         update_code_signing_settings(
-            path: "../builds/iOS/Unity-iPhone.xcodeproj",
+            path: "../builds/iOS/iOS/Unity-iPhone.xcodeproj",
             targets: "Unity-iPhone",
             code_sign_identity: "iPhone Distribution",
             use_automatic_signing: false
@@ -71,7 +71,7 @@ platform :ios do
 
         apple_app_id = ENV["APPLE_APP_ID"]
         provisioning_profile_specifier = lane_context[:MATCH_PROVISIONING_PROFILE_MAPPING][apple_app_id]
-        build_app(project: "../builds/iOS/Unity-iPhone.xcodeproj",
+        build_app(project: "../builds/iOS/iOS/Unity-iPhone.xcodeproj",
             export_method: "ad-hoc",
             scheme: "Unity-iPhone",
             configuration: "Release",
