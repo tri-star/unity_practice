@@ -214,5 +214,5 @@ jobs:
           APPLE_APP_ID: "com.UrbanTheory.action-sample"
           APPLE_TEAM_ID: "F946L3T4HH"
         run: |
-          cd ios
+          cd deploy
           bundle exec fastlane ios adhoc --verbose
