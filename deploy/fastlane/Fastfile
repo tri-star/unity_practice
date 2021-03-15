@@ -49,10 +49,10 @@ platform :ios do
     desc "Archive AdHoc and send to Firebase"
     lane :adhoc do
 
-        setup_ci(
-          provider: "travis",
-          force: true
-        )
+        # setup_ci(
+        #   provider: "travis",
+        #   force: true
+        # )
 
         match(
             readonly: true,

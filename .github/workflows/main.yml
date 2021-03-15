@@ -198,9 +198,6 @@ jobs:
           gem env
           gem install bundler -v 2.2.4
           bundle install
-      - name: Fix File Permissions
-        run: |
-          find builds/iOS -type f -name "**.sh" -exec chmod +x {} \;
 
       - name: Adhoc
         env:
