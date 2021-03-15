@@ -172,6 +172,8 @@ jobs:
         with:
           targetPlatform: iOS
           buildsPath: builds         
+      - name: Fix Build Dir Owner
+        run: sudo chown -R runner:runner builds
       - name: List BuildDir
         run: ls -l builds/iOS/iOS
       # - name: Upload Build
