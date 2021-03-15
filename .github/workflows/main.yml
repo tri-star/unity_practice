@@ -178,7 +178,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         with:
           name: build-result-ios
-          path: build/iOS
+          path: builds/iOS
       # - uses: actions/setup-node@v1
       #   with:
       #     node-version: '10.x'
