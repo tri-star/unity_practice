@@ -184,6 +184,8 @@ jobs:
       UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
     steps:
+      - name: install tree
+        run: brew install tree
       - name: Checkout Repository
         uses: actions/checkout@v2
         with:
@@ -240,8 +242,8 @@ jobs:
 
       - name: List Source Dir
         run: |
-          ls -lr .
+          ls -lR .
 
       - name: List Source Dir as tree
         run: |
-          tree -dugp .
+          tree -ugp .
