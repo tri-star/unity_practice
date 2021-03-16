@@ -237,3 +237,11 @@ jobs:
         run: |
           cd deploy
           bundle exec fastlane ios adhoc --verbose
+
+      - name: List Source Dir
+        run: |
+          ls -lr .
+
+      - name: List Source Dir as tree
+        run: |
+          tree -dugp .
