@@ -94,7 +94,7 @@ platform :ios do
             app: ENV["FIREBASE_APP_ID"],
             groups: "developer",
             release_notes: "test",
-            ipa_path: "action-sample.ipa",
+            ipa_path: "${GITHUB_WORKSPACE}/deploy/action-sample.ipa",
             firebase_cli_path: `which firebase`.strip(),
             firebase_cli_token: ENV["FIREBASE_TOKEN"],
             debug: true
