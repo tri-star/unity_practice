@@ -62,6 +62,9 @@ platform :ios do
             shallow_clone: true
         )
 
+        build_number = number_of_commits(all: true)
+        increment_build_number(build_number: build_number)
+
         update_code_signing_settings(
             path: "../builds/iOS/iOS/Unity-iPhone.xcodeproj",
             targets: "Unity-iPhone",
