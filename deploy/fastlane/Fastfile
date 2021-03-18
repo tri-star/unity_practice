@@ -3,7 +3,7 @@ default_platform(:android)
 platform :android do
     lane :adhoc do
         firebase_app_distribution(
-            app: ENV["FIREBASE_APP_ID"],
+            app: ENV["FIREBASE_APP_ID_ANDROID"],
             groups: "developer",
             firebase_cli_path: `which firebase`.strip(),
             firebase_cli_token: ENV["FIREBASE_TOKEN"],
@@ -62,11 +62,15 @@ platform :ios do
             shallow_clone: true
         )
 
+        xcode_project_dir = "../builds/iOS/iOS/Unity-iPhone.xcodeproj"
         build_number = number_of_commits(all: true)
-        increment_build_number(build_number: build_number)
+        increment_build_number(
+            build_number: build_number,
+            xcodeproj: xcode_project_dir
+        )
 
         update_code_signing_settings(
-            path: "../builds/iOS/iOS/Unity-iPhone.xcodeproj",
+            path: xcode_project_dir,
             targets: "Unity-iPhone",
             code_sign_identity: "iPhone Distribution",
             use_automatic_signing: false
@@ -74,7 +78,7 @@ platform :ios do
 
         apple_app_id = ENV["APPLE_APP_ID"]
         provisioning_profile_specifier = lane_context[:MATCH_PROVISIONING_PROFILE_MAPPING][apple_app_id]
-        build_app(project: "../builds/iOS/iOS/Unity-iPhone.xcodeproj",
+        build_app(project: xcode_project_dir,
             export_method: "ad-hoc",
             scheme: "Unity-iPhone",
             configuration: "Release",
@@ -94,7 +98,7 @@ platform :ios do
         # )
 
         firebase_app_distribution(
-            app: ENV["FIREBASE_APP_ID"],
+            app: ENV["FIREBASE_APP_ID_IOS"],
             groups: "developer",
             release_notes: "test",
             # ipa_path: "#{ENV['GITHUB_WORKSPACE']}/deploy/action-sample.ipa",
