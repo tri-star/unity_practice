@@ -63,9 +63,8 @@ platform :ios do
         )
 
         xcode_project_dir = "../builds/iOS/iOS/Unity-iPhone.xcodeproj"
-        build_number = number_of_commits(all: true)
         increment_build_number(
-            build_number: build_number,
+            build_number: ENV["GITHUB_RUN_NUMBER"],
             xcodeproj: xcode_project_dir
         )
 
