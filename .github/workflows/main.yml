@@ -73,7 +73,7 @@ jobs:
           targetPlatform: Android
           buildsPath: builds         
           androidAppBundle: false
-          androidVersionCode: ${{ env.GITHUB_RUN_ID }}
+          androidVersionCode: ${{ env.GITHUB_RUN_NUMBER }}
           # androidKeystoreName: urbantheory.keystore
           # androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           # androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
