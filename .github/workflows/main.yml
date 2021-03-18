@@ -39,6 +39,12 @@ jobs:
       UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
     steps:
+      - name: Run info
+        run: |
+          echo "GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER}"
+          echo "GITHUB_RUN_ID: ${GITHUB_RUN_ID}"
+          echo "GITHUB_ACTION: ${GITHUB_ACTION}"
+
       - name: Checkout Repository
         uses: actions/checkout@v2
         with:
@@ -67,6 +73,7 @@ jobs:
           targetPlatform: Android
           buildsPath: builds         
           androidAppBundle: false
+          androidVersionCode: ${{ env.GITHUB_RUN_ID }}
           # androidKeystoreName: urbantheory.keystore
           # androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           # androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
