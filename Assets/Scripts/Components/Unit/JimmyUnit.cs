@@ -42,8 +42,9 @@ namespace ActionSample.Components.Unit
         {
         }
 
-        public void Update()
+        public new void FixedUpdate()
         {
+            base.FixedUpdate();
             switch (GetState())
             {
                 case Unit.STATES.WALKING:
